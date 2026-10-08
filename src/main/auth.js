@@ -2,9 +2,15 @@ const fs = require('fs')
 const path = require('path')
 const { safeStorage } = require('electron')
 const { Auth } = require('msmc')
+const config = require('../../launcher.config.json')
 const paths = require('./paths')
 
 let minecraft = null
+
+// Application Azure du launcher (client public : l'identifiant n'est pas un secret).
+function createAuth(prompt) {
+  return new Auth({ client_id: config.auth.clientId, redirect: config.auth.redirect, prompt })
+}
 
 function profile() {
   return minecraft ? { name: minecraft.profile.name, id: minecraft.profile.id } : null
@@ -44,7 +50,7 @@ async function open(xbox) {
 
 async function login() {
   try {
-    const xbox = await new Auth('select_account').launch('electron', { width: 500, height: 650 })
+    const xbox = await createAuth('select_account').launch('electron', { width: 500, height: 650 })
     return { account: await open(xbox) }
   } catch (error) {
     return { account: null, error: message(error) }
@@ -56,7 +62,7 @@ async function restore() {
   const token = loadToken()
   if (!token) return null
   try {
-    return await open(await new Auth('none').refresh(token))
+    return await open(await createAuth('none').refresh(token))
   } catch {
     return null
   }

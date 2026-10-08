@@ -4,6 +4,10 @@
   "minecraft": "1.20.1",
   "forge": "47.4.10",
   "javaRuntime": "java-runtime-gamma",
+  "auth": {
+    "clientId": "244b4af2-588d-4a7b-be2b-0cfb32dc0e8d",
+    "redirect": "https://login.live.com/oauth20_desktop.srf"
+  },
   "server": { "host": "", "port": 25565 },
   "links": { "discord": "", "site": "" }
 }
