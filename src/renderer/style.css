@@ -1,0 +1,258 @@
+/* Palette tirée de la capture : prune du crépuscule, pêche du soleil couchant. */
+:root {
+  --ink: #17121c;
+  --ink-rgb: 23, 18, 28;
+  --text: #f6eee9;
+  --muted: rgba(246, 238, 233, 0.68);
+  --line: rgba(246, 238, 233, 0.14);
+  --hover: rgba(246, 238, 233, 0.1);
+  --accent: #f3a987;
+  --accent-hover: #f7bca0;
+  --accent-ink: #2a1712;
+  --danger: #ffb4a8;
+  --radius: 4px;
+  --gutter: 48px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  display: grid;
+  grid-template-rows: 40px 1fr 76px;
+  overflow: hidden;
+  color: var(--text);
+  font: 14px/20px 'Segoe UI Variable Text', 'Segoe UI', system-ui, sans-serif;
+  background:
+    linear-gradient(to top, rgba(var(--ink-rgb), 0.9) 0, rgba(var(--ink-rgb), 0.45) 34%, rgba(var(--ink-rgb), 0) 60%),
+    url('assets/background.png') center / cover,
+    var(--ink);
+  user-select: none;
+}
+
+svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius);
+  color: var(--muted);
+}
+
+.icon:hover {
+  color: var(--text);
+  background: var(--hover);
+}
+
+/* Barre de titre : toute la bande déplace la fenêtre, sauf les boutons. */
+.titlebar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 2px;
+  padding: 2px 4px;
+  -webkit-app-region: drag;
+}
+
+.titlebar .icon {
+  color: var(--text);
+  -webkit-app-region: no-drag;
+}
+
+.hero {
+  align-self: end;
+  padding: 0 var(--gutter) 28px;
+}
+
+.hero h1 {
+  font: 700 92px/0.9 Bahnschrift, 'Segoe UI Variable Display', 'Segoe UI', sans-serif;
+  font-stretch: 75%;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.hero p {
+  margin-top: 12px;
+  font-size: 15px;
+  color: var(--muted);
+}
+
+.bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 var(--gutter);
+  border-top: 1px solid var(--line);
+  background: rgba(var(--ink-rgb), 0.62);
+  backdrop-filter: blur(18px);
+}
+
+.progress {
+  position: absolute;
+  inset: -2px 0 auto;
+  height: 2px;
+  background: var(--line);
+}
+
+.progress span {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.15s linear;
+}
+
+.account {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.account img {
+  border-radius: var(--radius);
+  image-rendering: pixelated;
+  background: var(--hover);
+}
+
+.account span {
+  font-weight: 600;
+}
+
+.status {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.status.error {
+  color: var(--danger);
+}
+
+.primary {
+  min-width: 176px;
+  height: 44px;
+  padding: 0 24px;
+  border-radius: var(--radius);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--accent-ink);
+  background: var(--accent);
+}
+
+.primary:hover {
+  background: var(--accent-hover);
+}
+
+.primary:disabled {
+  color: var(--muted);
+  background: var(--hover);
+  cursor: default;
+}
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(var(--ink-rgb), 0.4);
+}
+
+.sheet {
+  position: fixed;
+  inset: 0 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  width: 340px;
+  padding: 12px 28px 24px;
+  border-left: 1px solid var(--line);
+  background: rgba(var(--ink-rgb), 0.9);
+  backdrop-filter: blur(24px);
+}
+
+.sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 -8px 20px 0;
+}
+
+.sheet h2 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 44px;
+}
+
+.field output {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+input[type='range'] {
+  width: 100%;
+  margin-bottom: 20px;
+  accent-color: var(--accent);
+}
+
+.ghost {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.ghost:hover {
+  background: var(--hover);
+}
+
+.about {
+  margin-top: auto;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--muted);
+}

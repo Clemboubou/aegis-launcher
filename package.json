@@ -1,0 +1,38 @@
+{
+  "name": "aegis-launcher",
+  "productName": "Aegis Launcher",
+  "version": "0.1.0",
+  "description": "Launcher du serveur Minecraft Aegis (RP post-apocalyptique)",
+  "author": "Clemboubou",
+  "private": true,
+  "main": "src/main/main.js",
+  "scripts": {
+    "start": "electron .",
+    "test:install": "node scripts/test-install.js",
+    "dist": "electron-builder --win nsis"
+  },
+  "dependencies": {
+    "@xmcl/core": "2.13.0",
+    "@xmcl/installer": "5.4.0",
+    "msmc": "^5.0.5"
+  },
+  "devDependencies": {
+    "electron": "^44.7.0",
+    "electron-builder": "^26.15.3"
+  },
+  "build": {
+    "appId": "fr.aegisrp.launcher",
+    "productName": "Aegis Launcher",
+    "files": [
+      "src/**/*",
+      "launcher.config.json"
+    ],
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false
+    }
+  }
+}

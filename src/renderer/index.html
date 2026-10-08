@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' https://mc-heads.net"
+    />
+    <title>Aegis Launcher</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="titlebar">
+      <button class="icon" data-window="minimize" aria-label="Réduire">
+        <svg viewBox="0 0 24 24"><path d="M5 12h14" /></svg>
+      </button>
+      <button class="icon" data-window="close" aria-label="Fermer">
+        <svg viewBox="0 0 24 24"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
+      </button>
+    </header>
+
+    <main class="hero">
+      <h1 id="name"></h1>
+      <p id="tagline"></p>
+    </main>
+
+    <footer class="bar">
+      <div class="progress" id="progress" hidden><span id="progress-fill"></span></div>
+
+      <div class="account" id="account" hidden>
+        <img id="avatar" alt="" width="36" height="36" />
+        <span id="pseudo"></span>
+        <button class="icon" id="logout" aria-label="Se déconnecter" title="Se déconnecter">
+          <svg viewBox="0 0 24 24">
+            <path d="m16 17 5-5-5-5" />
+            <path d="M21 12H9" />
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+          </svg>
+        </button>
+      </div>
+
+      <p class="status" id="status" role="status"></p>
+
+      <button class="icon" id="open-settings" aria-label="Réglages" title="Réglages">
+        <svg viewBox="0 0 24 24">
+          <path
+            d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"
+          />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+      </button>
+      <button class="primary" id="primary"></button>
+    </footer>
+
+    <div class="scrim" id="scrim" hidden></div>
+    <aside class="sheet" id="sheet" aria-label="Réglages" hidden>
+      <div class="sheet-head">
+        <h2>Réglages</h2>
+        <button class="icon" id="close-settings" aria-label="Fermer les réglages">
+          <svg viewBox="0 0 24 24"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
+        </button>
+      </div>
+
+      <label class="field" for="ram">
+        <span>Mémoire</span>
+        <output id="ram-value" for="ram"></output>
+      </label>
+      <input type="range" id="ram" step="1" />
+
+      <div class="field">
+        <span>Dossier du jeu</span>
+        <button class="ghost" id="open-game">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"
+            />
+          </svg>
+          Ouvrir
+        </button>
+      </div>
+
+      <p class="about" id="about"></p>
+    </aside>
+
+    <script src="app.js"></script>
+  </body>
+</html>
