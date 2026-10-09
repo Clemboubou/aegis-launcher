@@ -1,0 +1,2 @@
+# packwiz enregistre l'empreinte de ces fichiers : leurs fins de ligne ne doivent jamais être converties.
+pack/** text eol=lf
