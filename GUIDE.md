@@ -41,22 +41,47 @@ Tout est rangé chez le joueur dans `%APPDATA%\.aegis`. Son dossier de jeu (sauv
 
 1. **Un compte GitHub avec le droit d'écrire dans le dépôt.** Demandez à être ajouté comme collaborateur du dépôt `Clemboubou/aegis-launcher`.
 2. **Git** : `https://git-scm.com/download/win`
-3. **packwiz**, l'outil qui gère la liste des mods. Il n'est pas inclus dans le dépôt. Téléchargez `https://nightly.link/packwiz/packwiz/workflows/go/main/Windows%2064-bit.zip`, puis placez `packwiz.exe` dans le dossier `tools\packwiz\` du projet.
 
 Récupérez ensuite le projet, une seule fois :
 
 ```
 git clone https://github.com/Clemboubou/aegis-launcher
-cd aegis-launcher
 ```
 
-Toutes les commandes packwiz ci-dessous se lancent depuis le dossier `pack\` :
+## La méthode simple : `Publier.cmd`
+
+1. Déposez les fichiers `.jar` des mods à ajouter dans le dossier `pack\mods\` du projet.
+2. Pour retirer un mod, supprimez son fichier dans ce même dossier (`<nom>.pw.toml`, ou le `.jar`).
+3. Double-cliquez sur `Publier.cmd`, à la racine du projet.
+
+Le script affiche la liste des changements, puis les envoie sur GitHub. Chaque joueur les reçoit à son prochain clic sur **Jouer**. Il n'y a ni launcher à reconstruire, ni fichier à envoyer.
+
+Ce que fait le script :
+
+- Il récupère d'abord la dernière version du dépôt, au cas où quelqu'un d'autre aurait publié.
+- Il télécharge packwiz à la première utilisation.
+- Pour chaque `.jar`, il cherche le mod sur Modrinth à partir de son empreinte. S'il le trouve, il remplace le fichier par une simple référence (`<nom>.pw.toml`) : les joueurs téléchargeront le mod depuis Modrinth, et ses dépendances sont ajoutées automatiquement.
+- Un `.jar` inconnu de Modrinth reste dans le pack et sera distribué depuis GitHub. Vérifiez alors que sa licence autorise la redistribution, puisque le dépôt est public. La limite est de 95 Mo par fichier.
+
+GitHub peut mettre jusqu'à cinq minutes à servir la nouvelle version : un joueur qui relance le jeu juste après une publication peut encore recevoir l'ancien pack.
+
+Pour voir ce que le script ferait sans rien publier, lancez `Publier.cmd -Essai` depuis un terminal.
+
+Certains auteurs interdisent le téléchargement automatique de leur mod sur CurseForge. Un tel mod fait échouer la mise à jour de tous les joueurs : ne l'ajoutez pas au pack sans avoir vérifié qu'il existe sur Modrinth ou que sa licence permet de le redistribuer.
+
+**N'oubliez pas le serveur.** Le launcher ne s'occupe que des joueurs. Les mods doivent aussi être installés, dans la même version, dans le dossier `mods` du serveur chez l'hébergeur. Si les versions diffèrent, Forge refuse la connexion. Regardez la liste affichée par le script : elle inclut les dépendances ajoutées automatiquement, à installer elles aussi sur le serveur.
+
+Le reste de cette partie décrit la méthode manuelle, utile pour les cas particuliers.
+
+## Méthode manuelle : packwiz
+
+packwiz est l'outil qui gère la liste des mods. `Publier.cmd` l'installe dans `tools\packwiz\`. Les commandes ci-dessous se lancent depuis le dossier `pack\` :
 
 ```
 cd pack
 ```
 
-## Ajouter un mod
+## Ajouter un mod à la main
 
 ### Un mod présent sur Modrinth (cas recommandé)
 
@@ -88,19 +113,15 @@ Le fichier sera alors distribué directement depuis le dépôt GitHub. Vérifiez
 
 Chaque mod a un fichier `pack\mods\<nom>.pw.toml`. La ligne `side` indique où il s'installe : `"both"` (client et serveur), `"client"` ou `"server"`. Après modification, relancez `packwiz refresh`.
 
-## Publier les changements
+## Publier après une modification manuelle
 
-Un changement n'atteint les joueurs qu'après publication sur GitHub. Depuis la racine du projet :
+Un changement n'atteint les joueurs qu'après publication sur GitHub. Double-cliquez sur `Publier.cmd`, ou faites-le à la main depuis la racine du projet :
 
 ```
 git add pack
 git commit -m "Ajout du mod <nom>"
 git push
 ```
-
-C'est tout. Chaque joueur reçoit le changement à son prochain clic sur **Jouer**. Il n'y a ni launcher à reconstruire, ni fichier à envoyer.
-
-**N'oubliez pas le serveur.** Le launcher ne s'occupe que des joueurs. Tout mod marqué `both` ou `server` doit aussi être installé, dans la même version, dans le dossier `mods` du serveur chez l'hébergeur. Si les versions diffèrent, Forge refuse la connexion.
 
 ## Retirer ou mettre à jour un mod
 
@@ -111,7 +132,7 @@ C'est tout. Chaque joueur reçoit le changement à son prochain clic sur **Jouer
 ..\tools\packwiz\packwiz.exe list
 ```
 
-`remove` retire le mod du pack, et le launcher l'efface chez les joueurs. `update` passe un mod à sa dernière version compatible, `update --all` le fait pour tous. Publiez ensuite comme ci-dessus, et mettez à jour le serveur de la même façon.
+`remove` retire le mod du pack, et le launcher l'efface chez les joueurs. `update` passe un mod à sa dernière version compatible, `update --all` le fait pour tous. Publiez ensuite avec `Publier.cmd`, et mettez à jour le serveur de la même façon.
 
 ## Fichiers de configuration des mods
 
