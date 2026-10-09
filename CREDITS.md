@@ -9,11 +9,4 @@ Ces mods sont inclus dans `pack\mods\` avec l'autorisation de leur auteur. Ils n
 | Mod | Auteur | Page officielle | Autorisation |
 |---|---|---|---|
 | TakKit 1.3.1 | qarsan | [CurseForge](https://www.curseforge.com/minecraft/mc-mods/takkit) | Accordée le 10 octobre 2026 |
-
-## Mods à téléchargement manuel
-
-Ces mods ne sont pas distribués ici : le launcher ouvre leur page officielle et le joueur les télécharge lui-même.
-
-| Mod | Auteur | Page officielle |
-|---|---|---|
-| Zcraft Decoration 1.0.1 | kltyton | [CurseForge](https://www.curseforge.com/minecraft/mc-mods/zcraft-decoration) |
+| Zcraft Decoration 1.0.1 | NothingTs | [CurseForge](https://www.curseforge.com/minecraft/mc-mods/zcraft-decoration) | Accordée le 10 octobre 2026, par dérogation à sa licence « All Rights Reserved » |

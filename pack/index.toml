@@ -381,6 +381,10 @@ file = "config/zcraft_decorations-common.toml"
 hash = "f2c1e830358f4dbdb8c6c6c54d0103fcd7bbd1f15c73e7dbd4a9741d4ed4caba"
 
 [[files]]
+file = "mods/Zcraft_Decorations-1.0.1.jar"
+hash = "875e8ba624275a2f6e0a555d6dbfff396d9feb9e8ed541a29cb04add7d359c9b"
+
+[[files]]
 file = "mods/athena.pw.toml"
 hash = "e11ddca37c00c8cdf8ee89c7b59df544f50966d2d6c5b016916f023afb98c02e"
 metafile = true
