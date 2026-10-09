@@ -6,9 +6,23 @@ const paths = require('./paths')
 const settings = require('./settings')
 const auth = require('./auth')
 const game = require('./game')
+const prism = require('./prism')
+const { pathToFileURL } = require('url')
 
 // AEGIS_HIDDEN=1 : la fenêtre n'est jamais affichée (tests automatisés).
 const hidden = Boolean(process.env.AEGIS_HIDDEN)
+
+// Moteur « prism » : connexion et lancement délégués à Prism Launcher, en attendant l'approbation
+// de l'application Azure par Mojang. Moteur « native » : tout est fait par Aegis.
+const usePrism = config.engine === 'prism'
+
+// En développement, le pack est lu dans le dépôt ; une fois empaqueté, depuis son adresse publique.
+function packUrl() {
+  if (app.isPackaged) return config.packUrl
+  return pathToFileURL(path.join(app.getAppPath(), 'pack', 'pack.toml')).href
+}
+
+const report = (progress) => send('progress', progress)
 
 let window = null
 let restoring = null
@@ -53,14 +67,48 @@ function createWindow() {
   window.webContents.on('will-navigate', (event) => event.preventDefault())
 }
 
+async function playWithPrism() {
+  try {
+    await prism.play(config, settings.read(), packUrl(), report, {
+      onStarted() {
+        send('status', { phase: 'running' })
+        window.hide()
+      },
+      onExit() {
+        busy = false
+        show()
+        send('status', { phase: 'idle' })
+      }
+    })
+  } catch (error) {
+    log(error)
+    busy = false
+    send('status', { phase: 'idle', error: 'Installation interrompue. Vérifiez la connexion, puis réessayez.' })
+  }
+}
+
+async function loginWithPrism() {
+  if (busy) return { account: prism.account() }
+  busy = true
+  try {
+    return await prism.login(config, settings.read(), packUrl(), report)
+  } catch (error) {
+    log(error)
+    return { account: null, error: 'Connexion impossible. Réessayez.' }
+  } finally {
+    busy = false
+  }
+}
+
 async function play() {
   if (busy) return
   busy = true
   send('status', { phase: 'preparing' })
+  if (usePrism) return playWithPrism()
   try {
     const session = await auth.session()
     if (!session) throw new Error('Session expirée')
-    const prepared = await game.prepare(config, (progress) => send('progress', progress))
+    const prepared = await game.prepare(config, report)
     send('progress', { label: 'Lancement du jeu', ratio: 1 })
     const watcher = await game.start(config, settings.read(), session, prepared)
     watcher.on('minecraft-window-ready', () => {
@@ -93,10 +141,10 @@ ipcMain.handle('state', async () => ({
   version: app.getVersion(),
   settings: settings.read(),
   ram: { min: settings.ramMin, max: settings.ramMax },
-  account: await restoring
+  account: usePrism ? prism.account() : await restoring
 }))
-ipcMain.handle('login', () => auth.login())
-ipcMain.handle('logout', () => auth.logout())
+ipcMain.handle('login', () => (usePrism ? loginWithPrism() : auth.login()))
+ipcMain.handle('logout', () => (usePrism ? prism.logout() : auth.logout()))
 ipcMain.handle('play', () => void play())
 ipcMain.handle('settings', (_event, patch) => settings.write({ ram: patch.ram }))
 ipcMain.handle('open', (_event, target) => {
@@ -121,7 +169,7 @@ if (!app.requestSingleInstanceLock()) {
     window.focus()
   })
   app.whenReady().then(() => {
-    restoring = auth.restore()
+    restoring = usePrism ? null : auth.restore()
     createWindow()
   })
   app.on('window-all-closed', () => app.quit())

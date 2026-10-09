@@ -23,17 +23,28 @@ npm install
 npm start
 ```
 
-### Ce que fait le prototype
+### Deux moteurs
 
-- Connexion à un compte Microsoft (jeton de rafraîchissement chiffré par Windows).
-- Installation de Java 17, Minecraft 1.20.1 et Forge dans `%APPDATA%\.aegis\bin`.
-- Vérification et réparation des fichiers à chaque lancement.
-- Lancement du jeu dans `%APPDATA%\.aegis\game` (mods, config, saves).
-- Réglage de la mémoire allouée.
+`engine` dans `launcher.config.json` choisit qui fait la connexion et le lancement. L'interface est la même dans les deux cas.
+
+- `prism` (actif) : Aegis installe [Prism Launcher](https://prismlauncher.org) dans `%APPDATA%\.aegis\prism` et le pilote. La connexion Microsoft se fait dans une fenêtre Prism, une seule fois ; Prism installe Java, Minecraft et Forge, puis lance le jeu avec la mémoire choisie dans Aegis. [packwiz](https://packwiz.infra.link) met les mods à jour avant chaque lancement.
+- `native` : Aegis fait tout lui-même (connexion Microsoft, installation dans `%APPDATA%\.aegis\bin`, lancement dans `%APPDATA%\.aegis\game`). Utilisable quand l'application Azure du launcher aura été approuvée par Mojang.
+
+### Modifier le pack de mods
+
+Les mods sont décrits dans `pack\`. Avec le binaire packwiz placé dans `tools\packwiz\`, depuis le dossier `pack\` :
+
+```
+..\tools\packwiz\packwiz.exe modrinth add <nom du mod>
+..\tools\packwiz\packwiz.exe remove <nom du mod>
+..\tools\packwiz\packwiz.exe refresh
+```
+
+Les joueurs reçoivent le changement au lancement suivant, une fois `pack\` poussé sur la branche `main`. En développement (`npm start`), le pack est lu directement dans le dépôt local.
 
 ### Configuration
 
-`launcher.config.json` : nom, version de Minecraft et de Forge, application Azure utilisée pour la connexion, adresse du serveur (connexion directe au lancement si `server.host` est rempli), liens.
+`launcher.config.json` : nom, version de Minecraft et de Forge, moteur, adresse publique du pack (`packUrl`), version de Prism et son empreinte, application Azure du moteur natif, adresse du serveur (connexion directe au lancement si `server.host` est rempli), liens.
 
 ### Tests
 
@@ -42,8 +53,8 @@ npm start
 
 ### Pas encore fait
 
-- Synchronisation du modpack depuis un manifeste.
-- Mise à jour automatique du launcher, installeur, icône.
+- Mise à jour automatique du launcher.
+- Synchronisation des mods pour le moteur natif.
 
 ## Licence
 

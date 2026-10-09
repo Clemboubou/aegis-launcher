@@ -1,0 +1,13 @@
+name = "Aegis"
+author = "Aegis"
+version = "0.1.0"
+pack-format = "packwiz:1.1.0"
+
+[index]
+file = "index.toml"
+hash-format = "sha256"
+hash = "1c1ae96eae73a8279f351c7e96f68feba76853c257f06718ab4c1803c7bfe241"
+
+[versions]
+forge = "47.4.10"
+minecraft = "1.20.1"

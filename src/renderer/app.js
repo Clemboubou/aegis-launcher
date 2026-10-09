@@ -27,7 +27,8 @@ async function onPrimary() {
   $('primary').disabled = true
   const result = await aegis.login()
   account = result.account
-  if (result.error) setStatus(result.error, true)
+  $('progress').hidden = true
+  setStatus(result.error, Boolean(result.error))
   render()
 }
 
@@ -71,10 +72,13 @@ async function init() {
     button.addEventListener('click', () => aegis.window(button.dataset.window))
   }
 
+  // Sans `ratio`, l'étape n'a pas d'avancement mesurable : seul le libellé est affiché.
   aegis.onProgress(({ label, ratio }) => {
-    const percent = Math.round(ratio * 100)
+    const measured = typeof ratio === 'number'
+    const percent = Math.round((ratio || 0) * 100)
+    $('progress').hidden = !measured
     $('progress-fill').style.width = `${percent}%`
-    setStatus(`${label} · ${percent} %`)
+    setStatus(measured ? `${label} · ${percent} %` : label)
   })
   aegis.onStatus((status) => {
     phase = status.phase

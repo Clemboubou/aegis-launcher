@@ -31,7 +31,16 @@ function loadToken() {
   }
 }
 
+// Journalise l'étape en échec et le code HTTP, jamais de jeton.
+function log(error) {
+  const code = typeof error === 'string' ? error : error?.ts || error?.message || 'erreur inconnue'
+  const status = error?.response?.status ? ` HTTP ${error.response.status}` : ''
+  fs.mkdirSync(paths.root, { recursive: true })
+  fs.appendFileSync(path.join(paths.root, 'launcher.log'), `${new Date().toISOString()} auth ${code}${status}\n`)
+}
+
 function message(error) {
+  log(error)
   const code = typeof error === 'string' ? error : error?.ts || error?.message || ''
   if (code.includes('gui.closed')) return null
   if (code.includes('xsts.child')) return 'Compte enfant : un adulte doit l’ajouter à une famille Microsoft.'

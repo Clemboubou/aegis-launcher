@@ -10,7 +10,8 @@
   "scripts": {
     "start": "electron .",
     "test:install": "node scripts/test-install.js",
-    "dist": "electron-builder --win nsis"
+    "icon": "electron scripts/make-icon.js",
+    "dist": "electron-builder --win"
   },
   "dependencies": {
     "@xmcl/core": "2.13.0",
@@ -26,14 +27,23 @@
     "productName": "Aegis Launcher",
     "files": [
       "src/**/*",
+      "resources/**/*",
       "launcher.config.json"
     ],
     "win": {
-      "target": "nsis"
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "build/icon.png"
     },
     "nsis": {
       "oneClick": true,
-      "perMachine": false
+      "perMachine": false,
+      "artifactName": "Aegis Launcher Setup ${version}.${ext}"
+    },
+    "portable": {
+      "artifactName": "Aegis Launcher.${ext}"
     }
   }
 }
