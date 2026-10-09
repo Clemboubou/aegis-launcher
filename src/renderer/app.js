@@ -27,7 +27,6 @@ async function onPrimary() {
   $('primary').disabled = true
   const result = await aegis.login()
   account = result.account
-  $('progress').hidden = true
   setStatus(result.error, Boolean(result.error))
   render()
 }
@@ -76,8 +75,9 @@ async function init() {
   aegis.onProgress(({ label, ratio }) => {
     const measured = typeof ratio === 'number'
     const percent = Math.round((ratio || 0) * 100)
-    $('progress').hidden = !measured
-    $('progress-fill').style.width = `${percent}%`
+    $('progress').hidden = false
+    $('progress').classList.toggle('indeterminate', !measured)
+    $('progress-fill').style.width = measured ? `${percent}%` : ''
     setStatus(measured ? `${label} · ${percent} %` : label)
   })
   aegis.onStatus((status) => {

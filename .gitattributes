@@ -1,2 +1,3 @@
-# packwiz enregistre l'empreinte de ces fichiers : leurs fins de ligne ne doivent jamais être converties.
-pack/** text eol=lf
+# packwiz enregistre l'empreinte de ces fichiers : git ne doit jamais en convertir les fins de ligne,
+# ni toucher aux fichiers binaires (jar) qu'on y dépose.
+pack/** -text

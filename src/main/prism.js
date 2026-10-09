@@ -10,6 +10,8 @@ const { Readable, Transform } = require('stream')
 const paths = require('./paths')
 
 const run = promisify(execFile)
+// Délai avant de réafficher une fenêtre de Prism masquée alors que rien ne semble avancer.
+const revealAfter = 90000
 const resources = path.join(__dirname, '../../resources')
 
 const prismDir = path.join(paths.root, 'prism')
@@ -37,6 +39,7 @@ async function download(config, report) {
     }
   })
   const zip = path.join(paths.root, 'prism.zip')
+  fs.mkdirSync(paths.root, { recursive: true })
   await pipeline(Readable.fromWeb(response.body), meter, fs.createWriteStream(zip))
   if (hash.digest('hex').toUpperCase() !== config.prism.sha256.toUpperCase()) {
     fs.rmSync(zip)
@@ -97,7 +100,8 @@ function writeInstance(config, settings, packUrl) {
       `name=${config.name}`,
       'iconKey=aegis',
       'OverrideCommands=true',
-      `PreLaunchCommand="\\"$INST_JAVA\\" -jar packwiz-installer-bootstrap.jar ${packUrl}"`,
+      // -g : packwiz met les mods à jour sans afficher sa fenêtre.
+      `PreLaunchCommand="\\"$INST_JAVA\\" -jar packwiz-installer-bootstrap.jar -g ${packUrl}"`,
       'OverrideMemory=true',
       'MinMemAlloc=1024',
       `MaxMemAlloc=${settings.ram * 1024}`,
@@ -148,22 +152,141 @@ async function login(config, settings, packUrl, report) {
   })
 }
 
-// Lance le jeu. `onStarted` est appelé quand le jeu écrit son journal, `onExit` quand Prism se ferme.
-async function play(config, settings, packUrl, report, { onStarted, onExit }) {
+// Prism n'a pas de réglage pour masquer sa fenêtre de progression. Ce script la cache de l'extérieur :
+// il lit sur son entrée l'identifiant du processus à surveiller, masque toute fenêtre que ce processus
+// affiche, et écrit l'identifiant et le titre de chacune.
+const hiderScript = `
+[Console]::OutputEncoding = [Text.Encoding]::UTF8
+Add-Type @"
+using System; using System.Text; using System.Collections.Generic; using System.Runtime.InteropServices;
+public class Win {
+  public delegate bool Callback(IntPtr handle, IntPtr data);
+  [DllImport("user32.dll")] static extern bool EnumWindows(Callback callback, IntPtr data);
+  [DllImport("user32.dll")] static extern uint GetWindowThreadProcessId(IntPtr handle, out uint id);
+  [DllImport("user32.dll")] static extern bool IsWindowVisible(IntPtr handle);
+  [DllImport("user32.dll")] static extern int GetWindowText(IntPtr handle, StringBuilder text, int size);
+  [DllImport("user32.dll")] public static extern bool ShowWindow(IntPtr handle, int command);
+  public static List<IntPtr> Visible(uint target) {
+    var found = new List<IntPtr>();
+    EnumWindows((handle, data) => { uint id; GetWindowThreadProcessId(handle, out id); if (id == target && IsWindowVisible(handle)) found.Add(handle); return true; }, IntPtr.Zero);
+    return found;
+  }
+  public static string Title(IntPtr handle) { var text = new StringBuilder(256); GetWindowText(handle, text, 256); return text.ToString(); }
+}
+"@
+[Console]::Out.WriteLine('ready')
+$target = [uint32][Console]::In.ReadLine()
+$hidden = New-Object 'System.Collections.Generic.HashSet[IntPtr]'
+while ($true) {
+  foreach ($handle in [Win]::Visible($target)) {
+    [Win]::ShowWindow($handle, 0) | Out-Null
+    if ($hidden.Add($handle)) { [Console]::Out.WriteLine('hidden ' + $handle.ToInt64() + ' ' + [Win]::Title($handle)) }
+  }
+  Start-Sleep -Milliseconds 80
+}
+`
+
+const showScript = (handles) => `
+Add-Type -Namespace Native -Name Win -MemberDefinition '[DllImport("user32.dll")] public static extern bool ShowWindow(IntPtr handle, int command);'
+foreach ($handle in ${handles.join(',')}) { [Native.Win]::ShowWindow([IntPtr]$handle, 5) | Out-Null }
+`
+
+function powershell(script, stdio) {
+  const encoded = Buffer.from(script, 'utf16le').toString('base64')
+  return spawn('powershell', ['-NoProfile', '-NonInteractive', '-EncodedCommand', encoded], { windowsHide: true, stdio })
+}
+
+// Démarre le script de masquage et attend qu'il soit prêt (la compilation prend environ une seconde).
+function createHider(onHidden) {
+  const child = powershell(hiderScript, ['pipe', 'pipe', 'ignore'])
+  const handles = []
+  let resolveReady
+  const ready = new Promise((resolve) => (resolveReady = resolve))
+  let buffer = ''
+  child.stdout.setEncoding('utf8')
+  child.stdout.on('data', (chunk) => {
+    buffer += chunk
+    const lines = buffer.split(/\r?\n/)
+    buffer = lines.pop()
+    for (const line of lines) {
+      const hidden = /^hidden (\d+) (.*)$/.exec(line)
+      if (line === 'ready') resolveReady()
+      else if (hidden) {
+        handles.push(hidden[1])
+        onHidden(hidden[2])
+      }
+    }
+  })
+  child.on('error', resolveReady)
+  child.on('exit', resolveReady)
+  return {
+    ready,
+    watch: (id) => child.stdin.write(`${id}\n`),
+    stop: () => child.kill(),
+    // Arrête le masquage et réaffiche les fenêtres déjà masquées.
+    reveal() {
+      child.kill()
+      if (handles.length) powershell(showScript(handles), 'ignore')
+    }
+  }
+}
+
+// Identifiants des processus Java en cours (jeu, packwiz, vérifications de Prism).
+async function javaProcesses() {
+  const { stdout } = await run('tasklist', ['/FO', 'CSV', '/NH'], { windowsHide: true })
+  const ids = new Set()
+  for (const line of stdout.split('\n')) {
+    const match = /^"javaw?\.exe","(\d+)"/i.exec(line)
+    if (match) ids.add(match[1])
+  }
+  return ids
+}
+
+// Lance le jeu. `onStarted` est appelé quand le jeu écrit son journal, `onExit` quand la partie est finie.
+async function play(config, settings, packUrl, report, { onStarted, onExit, onWindow }) {
   await prepare(config, settings, packUrl, report)
   report({ label: 'Préparation du jeu' })
+  const before = await javaProcesses()
+  let lastHidden = 0
+  const hider = createHider((title) => {
+    lastHidden = Date.now()
+    onWindow?.(title)
+  })
+  await hider.ready
   const launchedAt = Date.now()
   const log = path.join(instanceDir(config), '.minecraft', 'logs', 'latest.log')
   const child = spawn(exe, ['--launch', config.name], { cwd: prismDir })
-  const watcher = setInterval(() => {
-    if (!fs.existsSync(log) || fs.statSync(log).mtimeMs < launchedAt) return
-    clearInterval(watcher)
-    onStarted()
-  }, 2000)
+  hider.watch(child.pid)
+  const ours = new Set()
+  let started = false
+  let idle = 0
+  // Prism reste ouvert sans fenêtre après la fermeture du jeu : la fin de partie est donc détectée
+  // par la disparition des processus Java apparus depuis le lancement, puis Prism est fermé.
+  const watcher = setInterval(async () => {
+    if (!started && fs.existsSync(log) && fs.statSync(log).mtimeMs >= launchedAt) {
+      started = true
+      // Le jeu tourne : une fenêtre que Prism ouvrirait maintenant (rapport de plantage) doit rester visible.
+      hider.stop()
+      onStarted()
+    }
+    const running = await javaProcesses().catch(() => null)
+    if (!running) return
+    for (const id of running) if (!before.has(id)) ours.add(id)
+    const alive = [...ours].some((id) => running.has(id))
+    // Une fenêtre masquée depuis longtemps sans que rien ne tourne est sans doute un message d'erreur
+    // ou un long téléchargement : dans les deux cas, mieux vaut la montrer.
+    if (!started && !alive && lastHidden && Date.now() - lastHidden > revealAfter) {
+      hider.reveal()
+      lastHidden = 0
+    }
+    idle = started && !alive ? idle + 1 : 0
+    if (idle >= 2) child.kill()
+  }, 2500)
   child.on('exit', () => {
     clearInterval(watcher)
+    hider.stop()
     onExit()
   })
 }
 
-module.exports = { account, login, logout, play, prepare }
+module.exports = { account, login, logout, play, prepare, createHider }

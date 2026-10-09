@@ -137,6 +137,26 @@ input:focus-visible {
   transition: width 0.15s linear;
 }
 
+/* Étape sans avancement mesurable : un segment parcourt la barre. */
+.progress.indeterminate {
+  overflow: hidden;
+}
+
+.progress.indeterminate span {
+  width: 28%;
+  transition: none;
+  animation: slide 1.4s ease-in-out infinite;
+}
+
+@keyframes slide {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(360%);
+  }
+}
+
 .account {
   display: flex;
   align-items: center;
