@@ -1,0 +1,18 @@
+[
+    {
+        "name":  "TakKit",
+        "filename":  "takkit-1.3.1-1.20.1.jar",
+        "folder":  "mods",
+        "size":  550601,
+        "sha1":  "c18b109e5f8a6343de7eb786afbd4c753a040271",
+        "url":  "https://www.curseforge.com/minecraft/mc-mods/takkit/download/7013819"
+    },
+    {
+        "name":  "Zcraft Decoration",
+        "filename":  "Zcraft_Decorations-1.0.1.jar",
+        "folder":  "mods",
+        "size":  77119231,
+        "sha1":  "6eecfbff66dfb11816fc3d04bd26f1f161209bc3",
+        "url":  "https://www.curseforge.com/minecraft/mc-mods/zcraft-decoration/download/8113093"
+    }
+]

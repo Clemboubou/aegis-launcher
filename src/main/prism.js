@@ -7,7 +7,9 @@ const { spawn, execFile } = require('child_process')
 const { promisify } = require('util')
 const { pipeline } = require('stream/promises')
 const { Readable, Transform } = require('stream')
+const os = require('os')
 const paths = require('./paths')
+const manual = require('./manual')
 
 const run = promisify(execFile)
 // Délai avant de réafficher une fenêtre de Prism masquée alors que rien ne semble avancer.
@@ -243,8 +245,16 @@ async function javaProcesses() {
 }
 
 // Lance le jeu. `onStarted` est appelé quand le jeu écrit son journal, `onExit` quand la partie est finie.
-async function play(config, settings, packUrl, report, { onStarted, onExit, onWindow }) {
+async function play(config, settings, packUrl, report, { onStarted, onExit, onWindow, open, downloads }) {
   await prepare(config, settings, packUrl, report)
+  await manual.ensure({
+    packUrl,
+    game: path.join(instanceDir(config), '.minecraft'),
+    stateFile: path.join(paths.root, 'manual-mods.json'),
+    downloads: downloads || path.join(os.homedir(), 'Downloads'),
+    open: open || (async () => {}),
+    report
+  })
   report({ label: 'Préparation du jeu' })
   const before = await javaProcesses()
   let lastHidden = 0

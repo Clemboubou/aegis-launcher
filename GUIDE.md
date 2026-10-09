@@ -67,7 +67,26 @@ GitHub peut mettre jusqu'à cinq minutes à servir la nouvelle version : un joue
 
 Pour voir ce que le script ferait sans rien publier, lancez `Publier.cmd -Essai` depuis un terminal.
 
-Certains auteurs interdisent le téléchargement automatique de leur mod sur CurseForge. Un tel mod fait échouer la mise à jour de tous les joueurs : ne l'ajoutez pas au pack sans avoir vérifié qu'il existe sur Modrinth ou que sa licence permet de le redistribuer.
+### Les mods à téléchargement manuel
+
+Certains auteurs interdisent sur CurseForge le téléchargement de leur mod par des outils tiers. Un tel mod ne doit pas être mis dans le pack : il ferait échouer la mise à jour de tous les joueurs. C'est le cas aujourd'hui de **TakKit** et de **Zcraft Decoration**.
+
+Ces mods sont listés à part, dans `pack\manual.json`. Au clic sur **Jouer**, si l'un d'eux manque chez le joueur, le launcher ouvre sa page de téléchargement officielle dans le navigateur, attend que le fichier arrive dans le dossier Téléchargements, puis le range lui-même dans le jeu. Le joueur n'a cette étape à faire qu'une fois par fichier.
+
+Chaque entrée de `manual.json` décrit un fichier :
+
+```json
+{
+  "name": "TakKit",
+  "filename": "takkit-1.3.1-1.20.1.jar",
+  "folder": "mods",
+  "size": 550601,
+  "sha1": "c18b109e5f8a6343de7eb786afbd4c753a040271",
+  "url": "https://www.curseforge.com/minecraft/mc-mods/takkit/download/7013819"
+}
+```
+
+`size` est la taille du fichier en octets, `sha1` son empreinte, et `url` l'adresse de téléchargement CurseForge (`…/download/<numéro du fichier>`). Pour obtenir l'empreinte d'un fichier : `Get-FileHash <fichier> -Algorithm SHA1` dans PowerShell, à écrire en minuscules. Si vous changez la version d'un de ces mods sur le serveur, mettez à jour son entrée, puis publiez avec `Publier.cmd`. Retirer une entrée fait supprimer le fichier chez les joueurs.
 
 **N'oubliez pas le serveur.** Le launcher ne s'occupe que des joueurs. Les mods doivent aussi être installés, dans la même version, dans le dossier `mods` du serveur chez l'hébergeur. Si les versions diffèrent, Forge refuse la connexion. Regardez la liste affichée par le script : elle inclut les dépendances ajoutées automatiquement, à installer elles aussi sur le serveur.
 

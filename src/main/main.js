@@ -70,6 +70,8 @@ function createWindow() {
 async function playWithPrism() {
   try {
     await prism.play(config, settings.read(), packUrl(), report, {
+      downloads: app.getPath('downloads'),
+      open: (url) => shell.openExternal(url),
       onStarted() {
         send('status', { phase: 'running' })
         window.hide()
@@ -83,7 +85,13 @@ async function playWithPrism() {
   } catch (error) {
     log(error)
     busy = false
-    send('status', { phase: 'idle', error: 'Installation interrompue. Vérifiez la connexion, puis réessayez.' })
+    const waiting = error.message === 'manual-download-timeout'
+    send('status', {
+      phase: 'idle',
+      error: waiting
+        ? 'Téléchargement manuel non terminé. Recliquez sur Jouer pour reprendre.'
+        : 'Installation interrompue. Vérifiez la connexion, puis réessayez.'
+    })
   }
 }
 
