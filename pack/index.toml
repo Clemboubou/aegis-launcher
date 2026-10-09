@@ -716,6 +716,10 @@ hash = "aca7de14aa01b8082c14d3ced2dbd155afa61e2bb4befe53cbcc9e93ec4333a5"
 metafile = true
 
 [[files]]
+file = "mods/takkit-1.3.1-1.20.1.jar"
+hash = "21851436d2738039c958a28d815cef92a482975d0e8c62e3a181cda2babb5dab"
+
+[[files]]
 file = "mods/the-last-day.pw.toml"
 hash = "837af0a4c330d7be08bfbe15159e7040e962e1d6c818acc7c3b97461822df586"
 metafile = true
