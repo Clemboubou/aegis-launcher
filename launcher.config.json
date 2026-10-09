@@ -4,6 +4,7 @@
   "minecraft": "1.20.1",
   "forge": "47.4.10",
   "javaRuntime": "java-runtime-gamma",
+  "memory": { "min": 8, "default": 8 },
   "engine": "prism",
   "packUrl": "https://raw.githubusercontent.com/Clemboubou/aegis-launcher/main/pack/pack.toml",
   "prism": {

@@ -421,11 +421,6 @@ hash = "2038c2c82c6b566677d386847ceab1f58b6b41599700aab6500ccc951eedca71"
 metafile = true
 
 [[files]]
-file = "mods/create.pw.toml"
-hash = "fb5c251cf4997fa65ca043bab7c9ecbd02e108031584a3e26276b77d212de23c"
-metafile = true
-
-[[files]]
 file = "mods/croptopia.pw.toml"
 hash = "4db6798a1586cee047fc2290ad1e5754fdbec8dd4226fd96594556501b2d7ab6"
 metafile = true
@@ -538,11 +533,6 @@ metafile = true
 [[files]]
 file = "mods/immersive-engineering.pw.toml"
 hash = "f0f53a142295b7d004100bea2cf0f60b06854b40eddc9abb8a447db4e57d4883"
-metafile = true
-
-[[files]]
-file = "mods/iris-flywheel-compat.pw.toml"
-hash = "1333123497c310fad39d59fd434ec62bbc755ad7260d988b9a79a9e68988cf70"
 metafile = true
 
 [[files]]
