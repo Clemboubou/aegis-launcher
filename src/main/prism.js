@@ -13,7 +13,9 @@ const manual = require('./manual')
 
 const run = promisify(execFile)
 // Délai avant de réafficher une fenêtre de Prism masquée alors que rien ne semble avancer.
-const revealAfter = 90000
+const revealAfter = Number(process.env.AEGIS_REVEAL_MS) || 90000
+// Durée sans aucune activité de Prism au-delà de laquelle le lancement est considéré comme bloqué.
+const stallAfter = Number(process.env.AEGIS_STALL_MS) || 120000
 const resources = path.join(__dirname, '../../resources')
 
 const prismDir = path.join(paths.root, 'prism')
@@ -53,25 +55,32 @@ async function download(config, report) {
   fs.rmSync(zip)
 }
 
-// Réglages de Prism posés une seule fois : il n'affiche alors au premier démarrage que la page de connexion.
+// Réglages de Prism nécessaires pour que son assistant de premier démarrage ne montre que la page de
+// connexion. Sans thème ni icônes déjà choisis, il ajoute une page « Apparence » qui bloque le lancement.
+const launcherSettings = {
+  Language: 'fr',
+  ApplicationTheme: 'dark',
+  IconTheme: 'pe_colored',
+  AutomaticJavaDownload: 'true',
+  AutomaticJavaSwitch: 'true',
+  UserAskedAboutAutomaticJavaDownload: 'true',
+  IgnoreJavaWizard: 'true',
+  CloseAfterLaunch: 'true',
+  QuitAfterGameStop: 'true',
+  ShowConsole: 'false'
+}
+
+// Ajoute les réglages manquants sans toucher à ceux que Prism ou le joueur ont déjà enregistrés.
 function writeLauncherSettings() {
   const file = path.join(prismDir, 'prismlauncher.cfg')
-  if (fs.existsSync(file)) return
-  fs.writeFileSync(
-    file,
-    [
-      '[General]',
-      'Language=fr',
-      'AutomaticJavaDownload=true',
-      'AutomaticJavaSwitch=true',
-      'UserAskedAboutAutomaticJavaDownload=true',
-      'IgnoreJavaWizard=true',
-      'CloseAfterLaunch=true',
-      'QuitAfterGameStop=true',
-      'ShowConsole=false',
-      ''
-    ].join('\n')
-  )
+  const lines = fs.existsSync(file) ? fs.readFileSync(file, 'utf8').split(/\r?\n/) : []
+  if (!lines.includes('[General]')) lines.unshift('[General]')
+  const missing = Object.entries(launcherSettings)
+    .filter(([key]) => !lines.some((line) => line.startsWith(`${key}=`)))
+    .map(([key, value]) => `${key}=${value}`)
+  if (!missing.length) return
+  lines.splice(lines.indexOf('[General]') + 1, 0, ...missing)
+  fs.writeFileSync(file, lines.join('\n'))
 }
 
 // La définition de l'instance est réécrite à chaque fois ; le dossier du joueur (.minecraft) n'est jamais touché.
@@ -155,8 +164,9 @@ async function login(config, settings, packUrl, report) {
 }
 
 // Prism n'a pas de réglage pour masquer sa fenêtre de progression. Ce script la cache de l'extérieur :
-// il lit sur son entrée l'identifiant du processus à surveiller, masque toute fenêtre que ce processus
-// affiche, et écrit l'identifiant et le titre de chacune.
+// il lit sur son entrée l'identifiant du processus à surveiller, masque ses fenêtres de progression
+// (« Veuillez patienter », ou sans titre) et écrit l'identifiant et le titre de chacune.
+// Toute autre fenêtre (message d'erreur, assistant, reconnexion) reste visible : le joueur doit y répondre.
 const hiderScript = `
 [Console]::OutputEncoding = [Text.Encoding]::UTF8
 Add-Type @"
@@ -178,30 +188,45 @@ public class Win {
 "@
 [Console]::Out.WriteLine('ready')
 $target = [uint32][Console]::In.ReadLine()
+$flag = [Console]::In.ReadLine()
 $hidden = New-Object 'System.Collections.Generic.HashSet[IntPtr]'
+$dialogs = -1
+function IsProgress($title) { return ($title -eq '') -or ($title -like 'Please wait*') -or ($title -like 'Veuillez patienter*') }
 while ($true) {
+  $reveal = Test-Path -LiteralPath $flag
+  $count = 0
   foreach ($handle in [Win]::Visible($target)) {
-    [Win]::ShowWindow($handle, 0) | Out-Null
-    if ($hidden.Add($handle)) { [Console]::Out.WriteLine('hidden ' + $handle.ToInt64() + ' ' + [Win]::Title($handle)) }
+    $title = [Win]::Title($handle)
+    if (-not (IsProgress $title)) { $count++ }
+    elseif (-not $reveal) {
+      [Win]::ShowWindow($handle, 0) | Out-Null
+      if ($hidden.Add($handle)) { [Console]::Out.WriteLine('hidden ' + $title) }
+    }
   }
+  # Sont réaffichées : toutes les fenêtres masquées quand le launcher le demande, et sinon celles qui ont
+  # été masquées avant d'avoir reçu leur titre et ne sont pas des fenêtres de progression.
+  foreach ($handle in @($hidden)) {
+    if ($reveal -or -not (IsProgress ([Win]::Title($handle)))) {
+      [Win]::ShowWindow($handle, 5) | Out-Null
+      $hidden.Remove($handle) | Out-Null
+    }
+  }
+  # Nombre de fenêtres auxquelles le joueur doit répondre (erreur, assistant, reconnexion).
+  if ($count -ne $dialogs) { $dialogs = $count; [Console]::Out.WriteLine('dialogs ' + $count) }
   Start-Sleep -Milliseconds 80
 }
 `
 
-const showScript = (handles) => `
-Add-Type -Namespace Native -Name Win -MemberDefinition '[DllImport("user32.dll")] public static extern bool ShowWindow(IntPtr handle, int command);'
-foreach ($handle in ${handles.join(',')}) { [Native.Win]::ShowWindow([IntPtr]$handle, 5) | Out-Null }
-`
-
-function powershell(script, stdio) {
-  const encoded = Buffer.from(script, 'utf16le').toString('base64')
-  return spawn('powershell', ['-NoProfile', '-NonInteractive', '-EncodedCommand', encoded], { windowsHide: true, stdio })
-}
-
 // Démarre le script de masquage et attend qu'il soit prêt (la compilation prend environ une seconde).
-function createHider(onHidden) {
-  const child = powershell(hiderScript, ['pipe', 'pipe', 'ignore'])
-  const handles = []
+// `onDialogs` reçoit le nombre de fenêtres de Prism qui attendent une réponse du joueur.
+function createHider(onHidden, onDialogs = () => {}) {
+  const encoded = Buffer.from(hiderScript, 'utf16le').toString('base64')
+  const child = spawn('powershell', ['-NoProfile', '-NonInteractive', '-EncodedCommand', encoded], {
+    windowsHide: true,
+    stdio: ['pipe', 'pipe', 'ignore']
+  })
+  // Le script lit ses ordres une seule fois : la demande de réaffichage passe par l'apparition de ce fichier.
+  const flag = path.join(os.tmpdir(), `aegis-reveal-${process.pid}-${Date.now()}`)
   let resolveReady
   const ready = new Promise((resolve) => (resolveReady = resolve))
   let buffer = ''
@@ -211,28 +236,24 @@ function createHider(onHidden) {
     const lines = buffer.split(/\r?\n/)
     buffer = lines.pop()
     for (const line of lines) {
-      const hidden = /^hidden (\d+) (.*)$/.exec(line)
       if (line === 'ready') resolveReady()
-      else if (hidden) {
-        handles.push(hidden[1])
-        onHidden(hidden[2])
-      }
+      else if (line.startsWith('hidden ')) onHidden(line.slice(7))
+      else if (line.startsWith('dialogs ')) onDialogs(Number(line.slice(8)))
     }
   })
   child.on('error', resolveReady)
   child.on('exit', resolveReady)
   return {
     ready,
-    watch: (id) => child.stdin.write(`${id}\n`),
-    stop: () => child.kill(),
-    // Arrête le masquage et réaffiche les fenêtres déjà masquées.
-    reveal() {
+    watch: (id) => child.stdin.write(`${id}\n${flag}\n`),
+    // Cesse de masquer et réaffiche ce qui l'était ; le script continue de compter les fenêtres.
+    reveal: () => fs.writeFileSync(flag, ''),
+    stop() {
       child.kill()
-      if (handles.length) powershell(showScript(handles), 'ignore')
+      fs.rmSync(flag, { force: true })
     }
   }
 }
-
 // Identifiants des processus Java en cours (jeu, packwiz, vérifications de Prism).
 async function javaProcesses() {
   const { stdout } = await run('tasklist', ['/FO', 'CSV', '/NH'], { windowsHide: true })
@@ -244,7 +265,14 @@ async function javaProcesses() {
   return ids
 }
 
-// Lance le jeu. `onStarted` est appelé quand le jeu écrit son journal, `onExit` quand la partie est finie.
+// Temps processeur consommé par un processus, tel que l'affiche tasklist (« 0:00:23 »).
+async function processorTime(id) {
+  const { stdout } = await run('tasklist', ['/V', '/FI', `PID eq ${id}`, '/FO', 'CSV', '/NH'], { windowsHide: true })
+  return stdout.split('","')[7] || ''
+}
+
+// Lance le jeu. `onStarted` est appelé quand le jeu écrit son journal, `onExit` quand la partie est finie
+// ou que le lancement a échoué (`failed`).
 async function play(config, settings, packUrl, report, { onStarted, onExit, onWindow, open, downloads }) {
   await prepare(config, settings, packUrl, report)
   await manual.ensure({
@@ -258,10 +286,14 @@ async function play(config, settings, packUrl, report, { onStarted, onExit, onWi
   report({ label: 'Préparation du jeu' })
   const before = await javaProcesses()
   let lastHidden = 0
-  const hider = createHider((title) => {
-    lastHidden = Date.now()
-    onWindow?.(title)
-  })
+  let dialogs = 0
+  const hider = createHider(
+    (title) => {
+      lastHidden = Date.now()
+      onWindow?.(title)
+    },
+    (count) => (dialogs = count)
+  )
   await hider.ready
   const launchedAt = Date.now()
   const log = path.join(instanceDir(config), '.minecraft', 'logs', 'latest.log')
@@ -269,33 +301,51 @@ async function play(config, settings, packUrl, report, { onStarted, onExit, onWi
   hider.watch(child.pid)
   const ours = new Set()
   let started = false
+  let failed = false
   let idle = 0
+  let tick = 0
+  let cpu = ''
+  let activity = ''
+  let activeAt = Date.now()
   // Prism reste ouvert sans fenêtre après la fermeture du jeu : la fin de partie est donc détectée
   // par la disparition des processus Java apparus depuis le lancement, puis Prism est fermé.
   const watcher = setInterval(async () => {
     if (!started && fs.existsSync(log) && fs.statSync(log).mtimeMs >= launchedAt) {
       started = true
       // Le jeu tourne : une fenêtre que Prism ouvrirait maintenant (rapport de plantage) doit rester visible.
-      hider.stop()
+      hider.reveal()
       onStarted()
     }
     const running = await javaProcesses().catch(() => null)
     if (!running) return
     for (const id of running) if (!before.has(id)) ours.add(id)
     const alive = [...ours].some((id) => running.has(id))
-    // Une fenêtre masquée depuis longtemps sans que rien ne tourne est sans doute un message d'erreur
-    // ou un long téléchargement : dans les deux cas, mieux vaut la montrer.
+    // Une fenêtre masquée depuis longtemps sans que rien ne tourne est sans doute un long téléchargement :
+    // mieux vaut la montrer.
     if (!started && !alive && lastHidden && Date.now() - lastHidden > revealAfter) {
       hider.reveal()
       lastHidden = 0
     }
     idle = started && !alive ? idle + 1 : 0
     if (idle >= 2) child.kill()
+
+    // Lancement bloqué : aucun Java, aucune fenêtre qui attend le joueur, et Prism ne travaille plus
+    // (son temps processeur ne bouge pas). Sans cette vérification, le launcher resterait figé.
+    if (tick++ % 4 === 0) cpu = await processorTime(child.pid).catch(() => cpu)
+    const now = `${alive}|${dialogs}|${cpu}`
+    if (now !== activity) {
+      activity = now
+      activeAt = Date.now()
+    }
+    if (!started && !alive && dialogs === 0 && Date.now() - activeAt > stallAfter) {
+      failed = true
+      child.kill()
+    }
   }, 2500)
   child.on('exit', () => {
     clearInterval(watcher)
     hider.stop()
-    onExit()
+    onExit({ failed })
   })
 }
 

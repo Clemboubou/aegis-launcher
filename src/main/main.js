@@ -76,10 +76,14 @@ async function playWithPrism() {
         send('status', { phase: 'running' })
         window.hide()
       },
-      onExit() {
+      onExit({ failed }) {
         busy = false
         show()
-        send('status', { phase: 'idle' })
+        if (failed) log(new Error('Prism n’a pas lancé le jeu'))
+        send('status', {
+          phase: 'idle',
+          error: failed ? 'Le jeu n’a pas démarré. Recliquez sur Jouer ; si cela se répète, prévenez l’équipe du serveur.' : undefined
+        })
       }
     })
   } catch (error) {
