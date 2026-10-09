@@ -1,0 +1,13 @@
+name = "Pyvtron Shaders"
+filename = "Pyvtron V1.3.2.zip"
+side = "client"
+
+[download]
+url = "https://cdn.modrinth.com/data/hNGQT69K/versions/NQzWkv5v/Pyvtron%20V1.3.2.zip"
+hash-format = "sha512"
+hash = "4e549711eb72283249753613a4b29b9b66d379cb804dfd1e1b8a03532605eae7a86b3c5223b81b73f06890642bf62174865748c4e5a328f9a1cdaab58d925a1c"
+
+[update]
+[update.modrinth]
+mod-id = "hNGQT69K"
+version = "NQzWkv5v"

@@ -1,0 +1,13 @@
+name = "Cursed Fog"
+filename = "Cursed Fog - V1.0.8.zip"
+side = "client"
+
+[download]
+url = "https://cdn.modrinth.com/data/sAZ9WsJP/versions/GdCtP4hx/Cursed%20Fog%20-%20V1.0.8.zip"
+hash-format = "sha512"
+hash = "a89f3752536b3c9eea68b721838d0eaa5b9916b1ac80b27ebae50a8c2205e42e52adcae5b1f340deb8ec019ea4daa890731013f2e80333a8a6d0d0e1c4b3a27c"
+
+[update]
+[update.modrinth]
+mod-id = "sAZ9WsJP"
+version = "GdCtP4hx"

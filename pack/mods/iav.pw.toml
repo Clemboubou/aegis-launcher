@@ -1,0 +1,13 @@
+name = "[Immersive Vehicles] IAV Parts pack"
+filename = "IAV-1.1.11-1.20.1.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/x99uA7Bu/versions/OqHpsCYj/IAV-1.1.11-1.20.1.jar"
+hash-format = "sha512"
+hash = "7844f3325ea994c46c6576eab46eae7b56cf25b041ae9e0a71f3a12cb6ff0f7d70fc8f8456688abd47619d3be2f1ebf9c363b61a221ecf5755539e34b68f5cb0"
+
+[update]
+[update.modrinth]
+mod-id = "x99uA7Bu"
+version = "OqHpsCYj"

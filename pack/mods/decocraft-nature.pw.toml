@@ -1,0 +1,13 @@
+name = "Decocraft Nature"
+filename = "decocraft_nature-1.0.4-1.20.1.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/KGIl2E4k/versions/lDxsv5Nu/decocraft_nature-1.0.4-1.20.1.jar"
+hash-format = "sha512"
+hash = "f917da7a019e67c526e8a7211fe1e2bab1d16a693bc8c3646dc9187c836b3d327952dc52549364277d38ac90472bdff80eebf0135cf2dac15aa225337204ccc3"
+
+[update]
+[update.modrinth]
+mod-id = "KGIl2E4k"
+version = "lDxsv5Nu"

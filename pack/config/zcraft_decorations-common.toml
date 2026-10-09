@@ -1,0 +1,24 @@
+
+[model_shapes]
+	#Collision shape mode: full, bounds, or block. full uses model elements and voxelizes rotated elements.
+	#碰撞形状模式：full、bounds或block。full使用模型元素并对旋转元素进行体素化。
+	shapeMode = "full"
+	#Voxel size in model pixel units for rotated model elements. Lower is more accurate but slower. Current default is 1.0.
+	#旋转模型元素的体素大小（以模型像素单位为单位）。较低的精度更高，但速度更慢。当前默认值为1.0。
+	#Range: 0.25 ~ 4.0
+	shapeVoxelStep16 = 1.0
+	#Maximum threads used to build the persistent shape cache. -1 means max(1, CPU cores - 1).
+	#用于构建持久形状缓存的最大线程数。-1表示max(1, CPU核心数-1)。
+	#Range: -1 ~ 256
+	shapeCacheThreads = -1
+	#After the file cache is ready, builds in-memory VoxelShape objects in the background. Disabled by default; VoxelShapes are normally built lazily on first use.
+	#文件缓存就绪后，在后台构建内存VoxelShape对象。默认关闭；通常在第一次使用时懒加载构建。
+	warmVoxelShapeCache = false
+	#Snaps multiblock proxy bounds to block cell edges when the overhang is within this many model pixels.
+	#当超出块单元边缘的超悬距离小于此值时，将多块代理边界对齐到块单元边缘。
+	#Range: 0.0 ~ 16.0
+	proxySnap16 = 4.0
+	#Places invisible proxy collision blocks for model shapes that extend outside the origin block.
+	#为模型形状放置不可见的代理碰撞块，这些形状扩展到原块外部。
+	proxyCollision = true
+

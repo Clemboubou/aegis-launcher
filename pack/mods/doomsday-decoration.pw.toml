@@ -1,0 +1,13 @@
+name = "Doomsday Decoration"
+filename = "doomsday_decoration-1.1.3-forge-1.20.1.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "b5250979fb0c79e8ea93742bfab9c67d4a886cad"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 6781856
+project-id = 1180487

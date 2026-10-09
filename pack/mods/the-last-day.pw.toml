@@ -1,0 +1,13 @@
+name = "The Last Day"
+filename = "the_last_day-0.8.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/x2YfqYfS/versions/niWscbRt/the_last_day-0.8.jar"
+hash-format = "sha512"
+hash = "946d2d6ad4032a0542ef1e2ce8ddf9d71f464890ead7f40f32b097f886c8ab913a005221f19bc21daefb3f7fb849bf97d2dce9e2be59e0cf145fcc6ddeb52f62"
+
+[update]
+[update.modrinth]
+mod-id = "x2YfqYfS"
+version = "niWscbRt"

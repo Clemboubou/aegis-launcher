@@ -1,0 +1,13 @@
+name = "SecurityCraft: More Protectables"
+filename = "moreprotectables-1.20.1-1.2.3.10.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/KnaNFo7k/versions/4mxLvVmY/moreprotectables-1.20.1-1.2.3.10.jar"
+hash-format = "sha512"
+hash = "88818cdc83097a4b540444e0fcac6ffc1cf50c67edeaebac38531cf1a1cf707528ed638f2c151f3772b984dfbfb987b8f6da76d46ab186b8e3cc18f61db8618e"
+
+[update]
+[update.modrinth]
+mod-id = "KnaNFo7k"
+version = "4mxLvVmY"

@@ -1,0 +1,13 @@
+name = "[TACZ] Gucci & Vuitton Attachments"
+filename = "guccivuitton-1.20.1-0.2.2.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/wdcuURhS/versions/NnUWhMdw/guccivuitton-1.20.1-0.2.2.jar"
+hash-format = "sha512"
+hash = "de58b0e5f605c24fb636db798f0da3c40e90d54723525945ffe7597711b14c6d95eb23c8a72725c1dad00ffa8abc3b919680a214f973734b9b3b7d47dbf8d850"
+
+[update]
+[update.modrinth]
+mod-id = "wdcuURhS"
+version = "NnUWhMdw"

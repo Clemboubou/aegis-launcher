@@ -1,0 +1,13 @@
+name = "Medical Remedies (Formerly Marbled's First Aid)"
+filename = "marbledsfirstaid-1.20.1forge-1.2.1.0.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/Y98QxocH/versions/qNaxU149/marbledsfirstaid-1.20.1forge-1.2.1.0.jar"
+hash-format = "sha512"
+hash = "382ae910959bc8dd8309b8d5eea8793c9a51f46f6b34cedade9f94418ebb14b816a393f303496c5450938885bb326565c894a84503bcf5407d45cf778e61f775"
+
+[update]
+[update.modrinth]
+mod-id = "Y98QxocH"
+version = "qNaxU149"

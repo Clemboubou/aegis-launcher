@@ -1,0 +1,13 @@
+name = "[TaCZ] Weapons and Tactics (Mod)"
+filename = "WaT 0.3.2.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "74d1fe9eeb8e0567be642deace0d7128185033c2"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 8216042
+project-id = 1411291

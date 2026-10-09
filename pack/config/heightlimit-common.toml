@@ -1,0 +1,26 @@
+
+#Height Limit Configuration
+#Adjusts the overworld's world height limits.
+#
+#Both min_y and max_y MUST be multiples of 16.
+#(max_y - min_y) MUST be a multiple of 16 (this is the world's height).
+#
+#Vanilla constraints enforced by Minecraft:
+#  - min_y >= -2032
+#  - max_y <=  2032
+#  - height (max_y - min_y) <= 4064
+#
+#Changing these after generating chunks may produce visual seams / broken terrain
+#in already-explored areas. Fresh worlds recommended when changing values.
+#
+#WARNING: Extreme heights increase RAM usage and can reduce TPS.
+[overworld]
+	#The minimum Y level (bottom of the world, inclusive).
+	#Default: -80. Must be a multiple of 16. Range: [-2032, 2016].
+	#Range: -2032 ~ 2016
+	min_y = -80
+	#The maximum Y level (top of the world, exclusive).
+	#Default: 800. Must be a multiple of 16. Range: [-2016, 2032].
+	#Range: -2016 ~ 2032
+	max_y = 800
+

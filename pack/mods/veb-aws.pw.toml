@@ -1,0 +1,13 @@
+name = "[Immersive Vehicles/IV/MTS] VEB Automobilwerke Schwikau Military/Civilian Tanks, Helicopters, Planes, and more!"
+filename = "VEB-1.1.11-1.20.1.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/BPmM9RTx/versions/lUAacLNx/VEB-1.1.11-1.20.1.jar"
+hash-format = "sha512"
+hash = "cadbe296efe16c71b6eddf531afddfceeb5d8862c77535123c2dd0f9938bbb64db03779a26475b7aaf2601c855200e4689efee1e7b071b04ee69c871defc27f2"
+
+[update]
+[update.modrinth]
+mod-id = "BPmM9RTx"
+version = "lUAacLNx"

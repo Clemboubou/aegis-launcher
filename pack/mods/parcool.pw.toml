@@ -1,0 +1,13 @@
+name = "ParCool! ~ Minecraft Parkour ~"
+filename = "ParCool-1.20.1-3.4.3.3.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/Fsvx2bdR/versions/uEY441aP/ParCool-1.20.1-3.4.3.3.jar"
+hash-format = "sha512"
+hash = "42f4da16b008343e39b7df17b8d52b8fc04ba6d52b2ea5deaeb7eb7cd19b70dc9d955d3e71d1357988d0e7ba05089dd1617e303ffdc7482357d1df98ac6f688a"
+
+[update]
+[update.modrinth]
+mod-id = "Fsvx2bdR"
+version = "uEY441aP"

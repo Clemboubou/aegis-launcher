@@ -1,0 +1,13 @@
+name = "[TaCZ] Endless Ammo"
+filename = "endlessammo-2.0.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/zFSJgmeS/versions/dXzfdyUh/endlessammo-2.0.jar"
+hash-format = "sha512"
+hash = "4f2560b5295052d007be3e1f1e0363620bc7e313571c9664424492ed9002e0fc9ef324b3543c7680a25481c6ba2ecc1fb7e9b12d43f8407eaad7e81903834cab"
+
+[update]
+[update.modrinth]
+mod-id = "zFSJgmeS"
+version = "dXzfdyUh"

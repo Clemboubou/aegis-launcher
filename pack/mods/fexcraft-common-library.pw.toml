@@ -1,0 +1,13 @@
+name = "[FCL] Fexcraft Common Library"
+filename = "fcl-20.41.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/FsnSr7bC/versions/nVngjwZ5/fcl-20.41.jar"
+hash-format = "sha512"
+hash = "41280f29d8199d9bf33100cce47dcc4fb87ec37b8ab11cb96e1a11d570f336cde6021a33aa1c00c1b1cc802d6349cbddf9b3e129dc6c129af30f8eefa316d566"
+
+[update]
+[update.modrinth]
+mod-id = "FsnSr7bC"
+version = "nVngjwZ5"

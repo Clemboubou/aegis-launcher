@@ -1,0 +1,13 @@
+name = "Sodium/Embeddium Options Mod Compat"
+filename = "sodiumoptionsmodcompat-forge-1.0.0-1.20.1.jar"
+side = "client"
+
+[download]
+url = "https://cdn.modrinth.com/data/Yg1VT27P/versions/PS8WDZSu/sodiumoptionsmodcompat-forge-1.0.0-1.20.1.jar"
+hash-format = "sha512"
+hash = "f4f01c582d4324a8aa820cb5b61ea83f2241a15a29242b04544612967a7bc733ea92737b1892c9045e1c6c6a84d4c0a6d5ee760e82307d26ce4a468bbaacd08a"
+
+[update]
+[update.modrinth]
+mod-id = "Yg1VT27P"
+version = "PS8WDZSu"

@@ -1,0 +1,58 @@
+{ 
+    "format": 1, 
+    "info0": "In this file you can configure general DocumentsMod settings.", 
+    "info1": "Documents are defined in '/config/documents.json' or via data-packs.", 
+    "wiki": "https://fexcraft.net/wiki/mod/documents", 
+    "general": { 
+        "player_img_url": { 
+            "info": [ 
+                "Service URL with which Player Images are retrieved.", 
+                "<UUID> gets auto replaced with the player's UUID, <NAME> with the name."
+            ], 
+            "value": "https://crafatar.com/avatars/<UUID>?size=32"
+        }, 
+        "date_format": { 
+            "info": [ 
+                "Default (Java) date format to be used on documents fields without an own format specified."
+            ], 
+            "value": "dd.MMM.yyyy"
+        }, 
+        "fill_message": { 
+            "info": [ 
+                "Multi-line greeting that displays when a player joins without having all documents filled/received yet."
+            ], 
+            "value": [ 
+                "You have <AMOUNT> form/s to fill out to receive your documents.", 
+                "Use '/documents fill <doc-id>' to start."
+            ]
+        }, 
+        "min_op_level": { 
+            "info": [ 
+                "Minimum Operator level to get and issue documents without being in the dedicated perm file."
+            ], 
+            "value": 4
+        }
+    }, 
+    "default_issuer": { 
+        "type": { 
+            "info": [ 
+                "Type of default Document Issuer (when not issued by a player in-game),", 
+                "set the type to 'player', if you want the UUID to be a player's."
+            ], 
+            "value": "server"
+        }, 
+        "uuid": { 
+            "info": [ 
+                "ID/UUID of default Document Issuer (when not issued by a player in-game),", 
+                "make sure the 'type' is 'player' if you plan to use a player UUID."
+            ], 
+            "value": "00000000-0000-0000-0000-000000000000"
+        }, 
+        "name": { 
+            "info": [ 
+                "Name of default Document Issuer (when not issued by a player in-game)."
+            ], 
+            "value": "Server"
+        }
+    }
+}

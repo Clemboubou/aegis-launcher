@@ -1,0 +1,13 @@
+name = "Blocks You Need (BYN) - Industrial, Steampunk, Laboratory, Space & more!"
+filename = "blocksyouneed_luna-1.11.4-forge-1.20.1.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/lIyS5pGh/versions/mKbPWfw8/blocksyouneed_luna-1.11.4-forge-1.20.1.jar"
+hash-format = "sha512"
+hash = "bb1d99c4859b5bcc15174c9e2d5895e56b53118badcc8ca5ed8cc6837cfd14b7e1971eabad41e64d787bae1f2943400367994d13ae43972896d577a1c241f0fa"
+
+[update]
+[update.modrinth]
+mod-id = "lIyS5pGh"
+version = "mKbPWfw8"

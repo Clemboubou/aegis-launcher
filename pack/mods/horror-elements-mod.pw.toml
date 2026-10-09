@@ -1,0 +1,13 @@
+name = "Horror Elements mod"
+filename = "horror_element_mod-1.6.3-forge-1.20.1.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/x9UbUYtK/versions/G36VMpvp/horror_element_mod-1.6.3-forge-1.20.1.jar"
+hash-format = "sha512"
+hash = "5d08d5a960447e7586a98d105289635f54430406e692f8e57a2cd144331037f63d839e7df3ff88080f2226441634cf17d5c51fe835bf0cf8bb7ac6424813cd0e"
+
+[update]
+[update.modrinth]
+mod-id = "x9UbUYtK"
+version = "G36VMpvp"

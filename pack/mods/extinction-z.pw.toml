@@ -1,0 +1,13 @@
+name = "Extinction Z"
+filename = "Extinction Z 1.20.1 1.1.3.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "8ba9e15e73e395d166aef1fa6c3074739655e3f2"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 7004322
+project-id = 1056956

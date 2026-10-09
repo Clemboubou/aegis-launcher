@@ -1,0 +1,13 @@
+name = "Nyf's Banner Patterns"
+filename = "nyfsbp-forge-1.20.1-1.1.1.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/6FwNRlG5/versions/I97Q0Rty/nyfsbp-forge-1.20.1-1.1.1.jar"
+hash-format = "sha512"
+hash = "e45d8133380e67926b87846543e42ad485c0e8c20c0b52f7976099445e3306c07b6d629f0ae444e90e8ab10ac59ce52728ced74e2bddd5dd0743c365aff8da83"
+
+[update]
+[update.modrinth]
+mod-id = "6FwNRlG5"
+version = "I97Q0Rty"

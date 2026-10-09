@@ -1,0 +1,13 @@
+name = "Tactical Movement Renewed (Point Blank and TACZ)"
+filename = "tacticalmovement-1.0.0.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "b8b5bff66def433912d93ebfd0fcafc6d094abef"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 5869027
+project-id = 1129993

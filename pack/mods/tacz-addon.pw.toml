@@ -1,0 +1,13 @@
+name = "TaCZ addon"
+filename = "taczaddon-1.1.8-hotfix3-for-new-soph.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "10a9946978be8d2ff17d01d927a7ac2db489cd8c"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 8400615
+project-id = 1238419

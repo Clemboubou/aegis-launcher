@@ -1,0 +1,9 @@
+
+[NVG]
+	#Allowed Values: NORMAL, BRIGHT
+	"PVS-14 Brightness" = "NORMAL"
+	#Allowed Values: NORMAL, BRIGHT
+	"PVS-23 Brightness" = "NORMAL"
+	#Allowed Values: NORMAL, BRIGHT
+	"GPNVG Brightness" = "NORMAL"
+

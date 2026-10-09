@@ -1,0 +1,13 @@
+name = "Survival Instinct"
+filename = "survival_instinct-1.0.2-forge-1.20.1.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/qs326NDd/versions/8v8qFdvq/survival_instinct-1.0.2-forge-1.20.1.jar"
+hash-format = "sha512"
+hash = "287fcf313ad6e0795b0b448b828e72b566332f8944e63c2383fbc6aeadff34850766a9655ba98a281f8378148ec2bb6617aab7a15f7f4094620b841af8f6b171"
+
+[update]
+[update.modrinth]
+mod-id = "qs326NDd"
+version = "8v8qFdvq"

@@ -1,0 +1,13 @@
+name = "Decocraft"
+filename = "decocraft-3.0.4-1.20.1-slim.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/IZJSgKZe/versions/K6V6djNF/decocraft-3.0.4-1.20.1-slim.jar"
+hash-format = "sha512"
+hash = "f32020fc64170a55afb26fa0ab8a58c6d5d957c97d9e387aa09d107a27737e90f6caafa46bf71b78c01d7b4c283042a88fcf5b8ba3465d0005f4dd6fa0580d05"
+
+[update]
+[update.modrinth]
+mod-id = "IZJSgKZe"
+version = "K6V6djNF"

@@ -1,0 +1,13 @@
+name = "Lexiconfig"
+filename = "lexiconfig-forge-1.4.21-epic.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/D157Rgyf/versions/ETnNoR2R/lexiconfig-forge-1.4.21-epic.jar"
+hash-format = "sha512"
+hash = "48b708d692c6a7c143d14a3e32d8ea016336fc5fd5ac59f65fc2913bc302e3d5ae9ddea4c09e7f886e5bbf277bb9e935c1fc3fa425f15773e233e84bd448356b"
+
+[update]
+[update.modrinth]
+mod-id = "D157Rgyf"
+version = "ETnNoR2R"

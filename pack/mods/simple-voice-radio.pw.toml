@@ -1,0 +1,13 @@
+name = "Simple Voice Radio"
+filename = "simpleradio-forge-1.20.1-4.5.7.9.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/S7b8mMXS/versions/etr8iUWv/simpleradio-forge-1.20.1-4.5.7.9.jar"
+hash-format = "sha512"
+hash = "9b940161c02995c9c6827f78d3a7ac21d4b6d0084d72dbcb7318b16fc7db4e73c3a765f0267e41c728e08a67a6b9d53053c225d9b56fc375b44e69a602db0b99"
+
+[update]
+[update.modrinth]
+mod-id = "S7b8mMXS"
+version = "etr8iUWv"

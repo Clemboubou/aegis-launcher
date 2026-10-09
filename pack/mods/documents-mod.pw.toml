@@ -1,0 +1,13 @@
+name = "Customizable Documents & Identification"
+filename = "documents-2.0.4.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/iEdFR7uJ/versions/ZRGe9Uwd/documents-2.0.4.jar"
+hash-format = "sha512"
+hash = "55013a459b08077915798f1199437021689122d99076d77592aeb19c538c8f696e61e36ee5598c56cd17dfe9f3eaf327eab479a91741390d1f06345e140582fa"
+
+[update]
+[update.modrinth]
+mod-id = "iEdFR7uJ"
+version = "ZRGe9Uwd"
