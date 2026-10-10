@@ -1,4 +1,5 @@
-# Écrit la mise en page FancyMenu de l'écran titre d'Aegis et la liste des écrans personnalisés.
+# Écrit les mises en page FancyMenu d'Aegis (écran titre, menu pause, écran de chargement) et la liste
+# des écrans personnalisés.
 # Usage : python build_menu_layouts.py <dossier config/fancymenu de sortie>
 import sys
 import time
@@ -140,8 +141,48 @@ title = [
 ]
 write('aegis_title.txt', 'title_screen', title)
 
+# --- Menu pause épuré : Reprendre, Options, Déconnexion, centrés. FancyMenu nomme lui-même ces boutons
+# (pause_*_button). Celui que Forge ajoute, « Mods », n'a pas de nom : il porte le numéro tiré de sa
+# position quand l'écran mesure 1000 x 1000 (x = 398, y = 348).
+pause = [
+    *common(),
+    vanilla('pause_return_to_game_button', **style(True), **place('mid-centered', -80, -34, 160)),
+    vanilla('pause_options_button', **style(False), **place('mid-centered', -80, -10, 160)),
+    vanilla('pause_disconnect_button', **style(False), **place('mid-centered', -80, 14, 160)),
+    *[vanilla(f'pause_{name}_button', hidden=True) for name in ('advancements', 'stats', 'send_feedback', 'report_bugs', 'share_to_lan')],
+    vanilla('398348', hidden=True),
+]
+write('aegis_pause.txt', 'pause_screen', pause)
+
+# --- Écran de chargement (mod Drippy Loading Screen) : image d'Aegis et logo à la place du logo Mojang ;
+# la barre de progression d'origine est conservée.
+loading = [
+    container('menu_background', {
+        'instance_identifier': 'aegis-loading-background',
+        'background_type': 'image',
+        'show_background': 'true',
+        'image_path': f'{ASSETS}loading.jpg',
+        'slide': 'false',
+        'repeat_texture': 'false',
+        'parallax': 'false',
+    }),
+    *common(),
+    container('element', {
+        'element_type': 'image',
+        'instance_identifier': 'aegis-loading-logo',
+        'source': f'{ASSETS}logo.png',
+        **place('mid-centered', -100, -58, 200, 78),
+    }),
+    vanilla('mojang_logo', hidden=True),
+]
+write('aegis_loading.txt', 'drippy_loading_overlay', loading)
+
 # --- Écrans dont la personnalisation est activée (par nom de classe).
-screens = ['net.minecraft.client.gui.screens.TitleScreen']
+screens = [
+    'net.minecraft.client.gui.screens.TitleScreen',
+    'net.minecraft.client.gui.screens.PauseScreen',
+    'de.keksuccino.drippyloadingscreen.customization.DrippyOverlayScreen',
+]
 (out / 'customizablemenus.txt').write_text(
     'type = customizablemenus\n\n' + '\n\n'.join(container(screen, {}) for screen in screens) + '\n\n', encoding='utf-8', newline='\n')
 print('mises en page écrites :', ', '.join(sorted(p.name for p in (out / 'customization').iterdir())))

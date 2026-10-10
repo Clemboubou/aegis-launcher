@@ -1,0 +1,119 @@
+type = fancymenu_layout
+
+layout-meta {
+  identifier = pause_screen
+  render_custom_elements_behind_vanilla = false
+  last_edited_time = 1791673325252
+  is_enabled = true
+  randommode = false
+  randomgroup = 1
+  randomonlyfirsttime = false
+  layout_index = 0
+}
+
+customization {
+  action = backgroundoptions
+  keepaspectratio = true
+}
+
+scroll_list_customization {
+  preserve_scroll_list_header_footer_aspect_ratio = true
+  render_scroll_list_header_shadow = true
+  render_scroll_list_footer_shadow = true
+  show_scroll_list_header_footer_preview_in_editor = false
+  repeat_scroll_list_header_texture = false
+  repeat_scroll_list_footer_texture = false
+  show_screen_background_overlay_on_custom_background = false
+  apply_vanilla_background_blur = false
+}
+
+layout_action_executable_blocks {
+}
+
+vanilla_button {
+  element_type = vanilla_button
+  instance_identifier = pause_return_to_game_button
+  is_hidden = false
+  backgroundnormal = [source:local]/config/fancymenu/assets/aegis/btn_primary.png
+  backgroundhovered = [source:local]/config/fancymenu/assets/aegis/btn_primary_hover.png
+  label_base_color = #17121C
+  label_hover_color = #17121C
+  label_shadow = false
+  anchor_point = mid-centered
+  x = -80
+  y = -34
+  width = 160
+  height = 20
+  stay_on_screen = true
+}
+
+vanilla_button {
+  element_type = vanilla_button
+  instance_identifier = pause_options_button
+  is_hidden = false
+  backgroundnormal = [source:local]/config/fancymenu/assets/aegis/btn_secondary.png
+  backgroundhovered = [source:local]/config/fancymenu/assets/aegis/btn_secondary_hover.png
+  label_base_color = #F4EFE9
+  label_hover_color = #FFFFFF
+  label_shadow = false
+  anchor_point = mid-centered
+  x = -80
+  y = -10
+  width = 160
+  height = 20
+  stay_on_screen = true
+}
+
+vanilla_button {
+  element_type = vanilla_button
+  instance_identifier = pause_disconnect_button
+  is_hidden = false
+  backgroundnormal = [source:local]/config/fancymenu/assets/aegis/btn_secondary.png
+  backgroundhovered = [source:local]/config/fancymenu/assets/aegis/btn_secondary_hover.png
+  label_base_color = #F4EFE9
+  label_hover_color = #FFFFFF
+  label_shadow = false
+  anchor_point = mid-centered
+  x = -80
+  y = 14
+  width = 160
+  height = 20
+  stay_on_screen = true
+}
+
+vanilla_button {
+  element_type = vanilla_button
+  instance_identifier = pause_advancements_button
+  is_hidden = true
+}
+
+vanilla_button {
+  element_type = vanilla_button
+  instance_identifier = pause_stats_button
+  is_hidden = true
+}
+
+vanilla_button {
+  element_type = vanilla_button
+  instance_identifier = pause_send_feedback_button
+  is_hidden = true
+}
+
+vanilla_button {
+  element_type = vanilla_button
+  instance_identifier = pause_report_bugs_button
+  is_hidden = true
+}
+
+vanilla_button {
+  element_type = vanilla_button
+  instance_identifier = pause_share_to_lan_button
+  is_hidden = true
+}
+
+vanilla_button {
+  element_type = vanilla_button
+  instance_identifier = 398348
+  is_hidden = true
+}
+

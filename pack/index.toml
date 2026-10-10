@@ -168,12 +168,28 @@ file = "config/fancymenu/assets/aegis/btn_secondary_hover.png"
 hash = "e09c215505520976ec7cd69d226db0361d503474b3bfca36ff75db08516e14b9"
 
 [[files]]
+file = "config/fancymenu/assets/aegis/loading.jpg"
+hash = "cb27f2de3c8f2e406d0ebfcc99f917f2b5feab9a97f5b66eca8ff3abb0fc88c2"
+
+[[files]]
 file = "config/fancymenu/assets/aegis/logo.png"
 hash = "7253619c28c53b19aee4875606507b2f6e617d5520017edded8f6828ea3a122f"
 
 [[files]]
+file = "config/fancymenu/assets/aegis/menu.ogg"
+hash = "9db8955037b8f35dadb121d34a4af9f0517f8f3c80eda21ed9fa4bca999c8a45"
+
+[[files]]
 file = "config/fancymenu/customizablemenus.txt"
-hash = "9f0ada5a7f0193d2d717d1c1736f545f5235c2597213731493b97488617ebbf2"
+hash = "ce0d84b2b57cf5f1f8223fe000ffe065ed91791a27b82411a9028bf2b85d8647"
+
+[[files]]
+file = "config/fancymenu/customization/aegis_loading.txt"
+hash = "9cf87db495f79a85e03a9cddfd2458b2350f3f4cc01a04dacc3588ad4898fd62"
+
+[[files]]
+file = "config/fancymenu/customization/aegis_pause.txt"
+hash = "630cd2a4ad8cac582794336e960c61f8bae2bfcbc4815a74f7bd048474c14628"
 
 [[files]]
 file = "config/fancymenu/customization/aegis_title.txt"
@@ -181,7 +197,7 @@ hash = "11bf0b4bad2b3b4cf1fd5e22e02f590d2ebecbf5d5da54b2d06e399953093bf5"
 
 [[files]]
 file = "config/fancymenu/options.txt"
-hash = "5b1b8ce5bcdc47c7c343cb4d1721d5e5274a9242f50c40380d31cc864223ff72"
+hash = "10a2980f7b0c88b182bf087d9620b89a07d7aee74bb8ea0b72474a02b1038327"
 
 [[files]]
 file = "config/farmersdelight-client.toml"
@@ -546,6 +562,11 @@ metafile = true
 [[files]]
 file = "mods/doomsday-decoration.pw.toml"
 hash = "1fb18505ec4875548903e27a2b05d094fcd96489072db89ce58bcaf41abeeb71"
+metafile = true
+
+[[files]]
+file = "mods/drippy-loading-screen.pw.toml"
+hash = "07c258eed928dfa116dcf134acc16886029a3921bb520984f117dd596c828a7e"
 metafile = true
 
 [[files]]

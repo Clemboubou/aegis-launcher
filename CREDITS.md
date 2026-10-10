@@ -27,7 +27,10 @@ Ces fichiers sont dans `resources\`, sans modification, et installés chez chaqu
 | Icônes « globe » et « accessibilité » des boutons | [Lucide](https://lucide.dev) | ISC |
 | Textures de boutons et de curseurs de `aegis-ui` | Redessinées pour Aegis, sur la base de la planche de textures d'origine de Minecraft (© Mojang) | — |
 | Logo « AEGIS » | Icône du serveur Discord d'Aegis | Propriété du serveur |
+| Musique du menu : « Anguish » | Kevin MacLeod ([incompetech.com](https://incompetech.com)) | [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/) |
 
-FancyMenu, Konkrete et Melody (par Keksuccino) ne sont pas recopiés ici : ils sont téléchargés depuis Modrinth chez chaque joueur.
+« Anguish » est distribué dans `pack\config\fancymenu\assets\aegis\menu.ogg`, converti en OGG sans autre modification. La licence impose de citer l'auteur : cette ligne doit rester tant que le morceau est utilisé.
+
+FancyMenu, Konkrete, Melody et Drippy Loading Screen (par Keksuccino) ne sont pas recopiés ici : ils sont téléchargés depuis Modrinth chez chaque joueur.
 
 [Prism Launcher](https://prismlauncher.org) (GPL-3.0) n'est pas inclus : le launcher le télécharge depuis sa page officielle au premier lancement.

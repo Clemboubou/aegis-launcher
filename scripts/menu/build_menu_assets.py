@@ -77,6 +77,15 @@ ratio = max(target_w / bg.width, target_h / bg.height)
 bg = bg.resize((round(bg.width * ratio), round(bg.height * ratio)), Image.LANCZOS)
 left, top = (bg.width - target_w) // 2, (bg.height - target_h) // 2
 bg = bg.crop((left, top, left + target_w, top + target_h))
+
+# --- Fond de l'écran de chargement : la même image, assombrie partout (davantage sur les bords) pour un logo centré.
+edges = Image.new('L', (target_w, target_h), 255)
+ImageDraw.Draw(edges).ellipse((target_w * 0.08, target_h * 0.02, target_w * 0.92, target_h * 0.98), fill=150)
+edges = edges.filter(ImageFilter.GaussianBlur(220)).point(lambda v: int(v * 0.86))
+loading = bg.copy()
+loading.paste(Image.new('RGB', bg.size, PLUM), (0, 0), edges)
+loading.save(out / 'loading.jpg', quality=88, subsampling=0)
+
 scrim = Image.new('L', (target_w, 1), 0)
 row = scrim.load()
 for x in range(target_w):

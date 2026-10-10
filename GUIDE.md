@@ -175,10 +175,12 @@ Ce qui reste long tient aux mods eux-mêmes : Decocraft lit ses modèles un par 
 
 ## Menu du jeu
 
-L'écran titre du jeu est redessiné par le mod FancyMenu et ses deux bibliothèques, Konkrete et Melody. Les trois sont côté client : rien à installer sur le serveur.
+L'écran titre, le menu pause et l'écran de chargement du jeu sont redessinés par le mod FancyMenu, ses deux bibliothèques Konkrete et Melody, et son complément Drippy Loading Screen. Tous sont côté client : rien à installer sur le serveur.
 
-- **`pack\config\fancymenu\customization\aegis_title.txt`** : la mise en page (fond, logo, boutons). Le bouton « Entrer dans la zone » rejoint l'adresse écrite sur la ligne qui contient `action_type:joinserver`. Si le serveur change d'adresse, c'est cette ligne qu'il faut modifier, puis publier.
-- **`pack\config\fancymenu\assets\aegis\`** : les images du menu (fond, logo, boutons).
+- **`pack\config\fancymenu\customization\aegis_title.txt`** : la mise en page de l'écran titre (fond, logo, boutons). Le bouton « Entrer dans la zone » rejoint l'adresse écrite sur la ligne qui contient `action_type:joinserver`. Si le serveur change d'adresse, c'est cette ligne qu'il faut modifier, puis publier.
+- **`aegis_pause.txt`**, dans le même dossier : le menu pause, réduit à Reprendre, Options et Déconnexion. Les autres boutons sont masqués, pas supprimés : pour en faire réapparaître un, passez son `is_hidden` à `false`. Le bouton « Mods » de Forge y est désigné par le numéro `398348`.
+- **`aegis_loading.txt`** : l'écran de chargement (image et logo d'Aegis à la place du logo Mojang). Il ne couvre que la dernière phase du démarrage ; la première fenêtre, celle de Forge, ne peut pas être modifiée.
+- **`pack\config\fancymenu\assets\aegis\`** : les images du menu (fonds, logo, boutons) et la musique de l'écran titre, `menu.ogg`. Pour changer de musique, remplacez ce fichier par un autre au format OGG, dont vous avez le droit de diffuser le contenu, et mettez à jour `CREDITS.md`. Le nom du fichier est écrit dans `config\fancymenu\options.txt` (`global_menu_music_tracks`).
 - **`pack\mods\aegis-ui-1.0.0.jar`** : un mod sans code, fait pour ce pack, qui donne l'aspect de la charte à tous les boutons et curseurs du jeu.
 - **`pack\essential\config.toml`** : fait reprendre cet aspect aux boutons du mod Essential.
 
