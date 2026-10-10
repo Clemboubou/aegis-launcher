@@ -173,6 +173,19 @@ Le launcher ne lance la vérification des mods que si le pack publié a changé 
 
 Ce qui reste long tient aux mods eux-mêmes : Decocraft lit ses modèles un par un à chaque démarrage (environ 12 secondes), Immersive Vehicles fait de même (environ 6 secondes), et Sinytra Connector, nécessaire à Axiom, en ajoute environ 5. Aucun réglage ne permet de l'éviter.
 
+## Menu du jeu
+
+L'écran titre du jeu est redessiné par le mod FancyMenu et ses deux bibliothèques, Konkrete et Melody. Les trois sont côté client : rien à installer sur le serveur.
+
+- **`pack\config\fancymenu\customization\aegis_title.txt`** : la mise en page (fond, logo, boutons). Le bouton « Entrer dans la zone » rejoint l'adresse écrite sur la ligne qui contient `action_type:joinserver`. Si le serveur change d'adresse, c'est cette ligne qu'il faut modifier, puis publier.
+- **`pack\config\fancymenu\assets\aegis\`** : les images du menu (fond, logo, boutons).
+- **`pack\mods\aegis-ui-1.0.0.jar`** : un mod sans code, fait pour ce pack, qui donne l'aspect de la charte à tous les boutons et curseurs du jeu.
+- **`pack\essential\config.toml`** : fait reprendre cet aspect aux boutons du mod Essential.
+
+Pour retoucher le menu à la souris, dans votre propre jeu : mettez `modpack_mode` à `false` dans `config\fancymenu\options.txt`, relancez le jeu et utilisez l'éditeur de FancyMenu (barre en haut de l'écran titre). Recopiez ensuite `config\fancymenu\customization\` et `config\fancymenu\assets\` dans le pack, remettez `modpack_mode` à `true`, et publiez. Sans cette dernière étape, la barre d'édition apparaîtrait chez tous les joueurs.
+
+Les images, la mise en page et le mod de textures ont été produits par les scripts Python de `scripts\menu\` ; ils ne servent que pour tout régénérer.
+
 ## Changer l'adresse du serveur, la version de Forge ou de Minecraft
 
 Ces réglages sont dans `launcher.config.json`, à la racine du projet :

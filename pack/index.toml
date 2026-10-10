@@ -132,6 +132,58 @@ file = "config/fabric/indigo-renderer.properties"
 hash = "604ca4eb0d7c8cc65d929d9728095c60fa30e070d16daa679624e26b39442122"
 
 [[files]]
+file = "config/fancymenu/assets/aegis/background.jpg"
+hash = "cb7e6a83185b2f3681a761f0e06593417cc9bed5ae55909f04d7fe599eb44eae"
+
+[[files]]
+file = "config/fancymenu/assets/aegis/btn_access.png"
+hash = "12f16ec5d9a52cb1050ce0a7d348b2c631039baa7faff2c663ee2f11be73bcdf"
+
+[[files]]
+file = "config/fancymenu/assets/aegis/btn_access_hover.png"
+hash = "b01ea053002e98b981d87100b31d68aba7051b141f7959b9a9a02c0a78a68ae8"
+
+[[files]]
+file = "config/fancymenu/assets/aegis/btn_lang.png"
+hash = "506ea1c729cdce90c534c9a9b5e3840b06c8215dbd69f8095f1947a86d4e3088"
+
+[[files]]
+file = "config/fancymenu/assets/aegis/btn_lang_hover.png"
+hash = "60e783a9fb5125a383b56a38f3d5d55564465e9cafd26f36b5713eb0b4b49ef5"
+
+[[files]]
+file = "config/fancymenu/assets/aegis/btn_primary.png"
+hash = "03b83ce6ba2a9e139168b4db4a081a263f108a9434a0376ad170ff769d7b609a"
+
+[[files]]
+file = "config/fancymenu/assets/aegis/btn_primary_hover.png"
+hash = "acaa881b0d886001c94dfd1a339cc147d7da73655cc5f7ae09578c5e19923382"
+
+[[files]]
+file = "config/fancymenu/assets/aegis/btn_secondary.png"
+hash = "d7f8c8e5fbf1296be9e3451ca26930211152def8065e5d07f3bf7ba4f334a802"
+
+[[files]]
+file = "config/fancymenu/assets/aegis/btn_secondary_hover.png"
+hash = "e09c215505520976ec7cd69d226db0361d503474b3bfca36ff75db08516e14b9"
+
+[[files]]
+file = "config/fancymenu/assets/aegis/logo.png"
+hash = "7253619c28c53b19aee4875606507b2f6e617d5520017edded8f6828ea3a122f"
+
+[[files]]
+file = "config/fancymenu/customizablemenus.txt"
+hash = "9f0ada5a7f0193d2d717d1c1736f545f5235c2597213731493b97488617ebbf2"
+
+[[files]]
+file = "config/fancymenu/customization/aegis_title.txt"
+hash = "11bf0b4bad2b3b4cf1fd5e22e02f590d2ebecbf5d5da54b2d06e399953093bf5"
+
+[[files]]
+file = "config/fancymenu/options.txt"
+hash = "5b1b8ce5bcdc47c7c343cb4d1721d5e5274a9242f50c40380d31cc864223ff72"
+
+[[files]]
 file = "config/farmersdelight-client.toml"
 hash = "940f68676859e852c600974c4776e986453ce7d3b2cf27ac156535e26c160e11"
 
@@ -397,6 +449,10 @@ file = "config/zcraft_decorations-common.toml"
 hash = "f2c1e830358f4dbdb8c6c6c54d0103fcd7bbd1f15c73e7dbd4a9741d4ed4caba"
 
 [[files]]
+file = "essential/config.toml"
+hash = "1a2790b6b3ac54825541f6492c4ab51e01779754680836b220dbf2356b8d22e5"
+
+[[files]]
 file = "essential/essential-loader.properties"
 hash = "ab06327b3a242d8eb3d985c98c5eaa82accc519d875952b82bd712d5e331f247"
 
@@ -407,6 +463,10 @@ hash = "ab06327b3a242d8eb3d985c98c5eaa82accc519d875952b82bd712d5e331f247"
 [[files]]
 file = "mods/Zcraft_Decorations-1.0.1.jar"
 hash = "875e8ba624275a2f6e0a555d6dbfff396d9feb9e8ed541a29cb04add7d359c9b"
+
+[[files]]
+file = "mods/aegis-ui-1.0.0.jar"
+hash = "0d3b770b276ee3c91bb395ef4d4cd05dfc47fefe357213bd4756c470bd6a2cbe"
 
 [[files]]
 file = "mods/athena.pw.toml"
@@ -519,6 +579,11 @@ hash = "384846105f45edeac2dc2649bedbbe75f9e7592fa3cda631f8af40d6b30ab00b"
 metafile = true
 
 [[files]]
+file = "mods/fancymenu.pw.toml"
+hash = "003d55edb33cd9daf0cccda051b7890c0d25e768223db32802c2dcd36a4872f6"
+metafile = true
+
+[[files]]
 file = "mods/farmers-delight.pw.toml"
 hash = "d478b8c5149f9c37bc0072d0608e2fbc6ff38cd3d15420f99c8a7ed2a55c8f0e"
 metafile = true
@@ -574,6 +639,11 @@ hash = "69918d4cb0fac54c9ed94f7a2223b04f9291f79c7f481f0b0e3649a77648fe1b"
 metafile = true
 
 [[files]]
+file = "mods/konkrete.pw.toml"
+hash = "90a70141bcec839b6a1aa647c91f97bb7b33b6b9e6ce6b3b18a4113aa7dff636"
+metafile = true
+
+[[files]]
 file = "mods/kotlin-for-forge.pw.toml"
 hash = "70a4ecd9d0c04ad20aeb976c1ee28933ce48a0a1f43df42deafaeb2ad7235297"
 metafile = true
@@ -616,6 +686,11 @@ metafile = true
 [[files]]
 file = "mods/medical-remedies.pw.toml"
 hash = "76c7e50a55aba5ef9cb5602cbeb09ad0f0e4bf677808d3dbe6bdc11c9ee8cac6"
+metafile = true
+
+[[files]]
+file = "mods/melody.pw.toml"
+hash = "8def80b33354bc9525033d543925d45cddf54c1ad8b5b943e567cc2b1749d337"
 metafile = true
 
 [[files]]

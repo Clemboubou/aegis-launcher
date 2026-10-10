@@ -1,0 +1,234 @@
+type = fancymenu_layout
+
+layout-meta {
+  identifier = title_screen
+  render_custom_elements_behind_vanilla = false
+  last_edited_time = 1791669814689
+  is_enabled = true
+  randommode = false
+  randomgroup = 1
+  randomonlyfirsttime = false
+  layout_index = 0
+}
+
+menu_background {
+  instance_identifier = aegis-title-background
+  background_type = image
+  show_background = true
+  image_path = [source:local]/config/fancymenu/assets/aegis/background.jpg
+  slide = false
+  repeat_texture = false
+  parallax = false
+}
+
+customization {
+  action = backgroundoptions
+  keepaspectratio = true
+}
+
+scroll_list_customization {
+  preserve_scroll_list_header_footer_aspect_ratio = true
+  render_scroll_list_header_shadow = true
+  render_scroll_list_footer_shadow = true
+  show_scroll_list_header_footer_preview_in_editor = false
+  repeat_scroll_list_header_texture = false
+  repeat_scroll_list_footer_texture = false
+  show_screen_background_overlay_on_custom_background = false
+  apply_vanilla_background_blur = false
+}
+
+layout_action_executable_blocks {
+}
+
+element {
+  element_type = image
+  instance_identifier = aegis-title-logo
+  source = [source:local]/config/fancymenu/assets/aegis/logo.png
+  anchor_point = mid-left
+  x = 24
+  y = -104
+  width = 150
+  height = 59
+  stay_on_screen = true
+}
+
+element {
+  element_type = custom_button
+  instance_identifier = aegis-title-join
+  button_element_executable_block_identifier = aegis-title-join-block
+  [executable_block:aegis-title-join-block][type:generic] = [executables:aegis-title-join-action;]
+  [executable_action_instance:aegis-title-join-action][action_type:joinserver] = projectaegis.mine.fun
+  navigatable = true
+  label = Entrer dans la zone
+  backgroundnormal = [source:local]/config/fancymenu/assets/aegis/btn_primary.png
+  backgroundhovered = [source:local]/config/fancymenu/assets/aegis/btn_primary_hover.png
+  label_base_color = #17121C
+  label_hover_color = #17121C
+  label_shadow = false
+  anchor_point = mid-left
+  x = 24
+  y = -34
+  width = 150
+  height = 20
+  stay_on_screen = true
+}
+
+vanilla_button {
+  element_type = vanilla_button
+  instance_identifier = mc_titlescreen_singleplayer_button
+  is_hidden = false
+  backgroundnormal = [source:local]/config/fancymenu/assets/aegis/btn_secondary.png
+  backgroundhovered = [source:local]/config/fancymenu/assets/aegis/btn_secondary_hover.png
+  label_base_color = #F4EFE9
+  label_hover_color = #FFFFFF
+  label_shadow = false
+  anchor_point = mid-left
+  x = 24
+  y = -8
+  width = 150
+  height = 20
+  stay_on_screen = true
+}
+
+vanilla_button {
+  element_type = vanilla_button
+  instance_identifier = 0
+  is_hidden = false
+  label = Éditeur de skin
+  backgroundnormal = [source:local]/config/fancymenu/assets/aegis/btn_secondary.png
+  backgroundhovered = [source:local]/config/fancymenu/assets/aegis/btn_secondary_hover.png
+  label_base_color = #F4EFE9
+  label_hover_color = #FFFFFF
+  label_shadow = false
+  anchor_point = mid-left
+  x = 24
+  y = 16
+  width = 150
+  height = 20
+  stay_on_screen = true
+}
+
+vanilla_button {
+  element_type = vanilla_button
+  instance_identifier = mc_titlescreen_options_button
+  is_hidden = false
+  backgroundnormal = [source:local]/config/fancymenu/assets/aegis/btn_secondary.png
+  backgroundhovered = [source:local]/config/fancymenu/assets/aegis/btn_secondary_hover.png
+  label_base_color = #F4EFE9
+  label_hover_color = #FFFFFF
+  label_shadow = false
+  anchor_point = mid-left
+  x = 24
+  y = 40
+  width = 150
+  height = 20
+  stay_on_screen = true
+}
+
+vanilla_button {
+  element_type = vanilla_button
+  instance_identifier = mc_titlescreen_quit_button
+  is_hidden = false
+  backgroundnormal = [source:local]/config/fancymenu/assets/aegis/btn_secondary.png
+  backgroundhovered = [source:local]/config/fancymenu/assets/aegis/btn_secondary_hover.png
+  label_base_color = #F4EFE9
+  label_hover_color = #FFFFFF
+  label_shadow = false
+  anchor_point = mid-left
+  x = 24
+  y = 64
+  width = 150
+  height = 20
+  stay_on_screen = true
+}
+
+element {
+  element_type = custom_button
+  instance_identifier = aegis-title-language
+  button_element_executable_block_identifier = aegis-title-language-block
+  [executable_block:aegis-title-language-block][type:generic] = [executables:aegis-title-language-action;]
+  [executable_action_instance:aegis-title-language-action][action_type:mimicbutton] = title_screen:mc_titlescreen_language_button
+  navigatable = true
+  label = 
+  backgroundnormal = [source:local]/config/fancymenu/assets/aegis/btn_lang.png
+  backgroundhovered = [source:local]/config/fancymenu/assets/aegis/btn_lang_hover.png
+  anchor_point = bottom-left
+  x = 24
+  y = -30
+  width = 20
+  height = 20
+  stay_on_screen = true
+}
+
+element {
+  element_type = custom_button
+  instance_identifier = aegis-title-accessibility
+  button_element_executable_block_identifier = aegis-title-accessibility-block
+  [executable_block:aegis-title-accessibility-block][type:generic] = [executables:aegis-title-accessibility-action;]
+  [executable_action_instance:aegis-title-accessibility-action][action_type:mimicbutton] = title_screen:mc_titlescreen_accessibility_button
+  navigatable = true
+  label = 
+  backgroundnormal = [source:local]/config/fancymenu/assets/aegis/btn_access.png
+  backgroundhovered = [source:local]/config/fancymenu/assets/aegis/btn_access_hover.png
+  anchor_point = bottom-left
+  x = 48
+  y = -30
+  width = 20
+  height = 20
+  stay_on_screen = true
+}
+
+vanilla_button {
+  element_type = vanilla_button
+  instance_identifier = mc_titlescreen_language_button
+  is_hidden = true
+}
+
+vanilla_button {
+  element_type = vanilla_button
+  instance_identifier = mc_titlescreen_accessibility_button
+  is_hidden = true
+}
+
+vanilla_button {
+  element_type = vanilla_button
+  instance_identifier = mc_titlescreen_multiplayer_button
+  is_hidden = true
+}
+
+vanilla_button {
+  element_type = vanilla_button
+  instance_identifier = mc_titlescreen_realms_button
+  is_hidden = true
+}
+
+vanilla_button {
+  element_type = vanilla_button
+  instance_identifier = forge_titlescreen_mods_button
+  is_hidden = true
+}
+
+vanilla_button {
+  element_type = vanilla_button
+  instance_identifier = minecraft_logo_widget
+  is_hidden = true
+}
+
+vanilla_button {
+  element_type = vanilla_button
+  instance_identifier = minecraft_splash_widget
+  is_hidden = true
+}
+
+vanilla_button {
+  element_type = vanilla_button
+  instance_identifier = minecraft_branding_widget
+  is_hidden = true
+}
+
+vanilla_button {
+  element_type = vanilla_button
+  instance_identifier = minecraft_realms_notification_icons_widget
+  is_hidden = true
+}
+
