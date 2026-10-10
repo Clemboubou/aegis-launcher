@@ -500,6 +500,11 @@ hash = "d478b8c5149f9c37bc0072d0608e2fbc6ff38cd3d15420f99c8a7ed2a55c8f0e"
 metafile = true
 
 [[files]]
+file = "mods/ferrite-core.pw.toml"
+hash = "902bac905b93271f02bd0951a22bac06a3da24f5c237fcaeb469e14a7679e508"
+metafile = true
+
+[[files]]
 file = "mods/fexcraft-common-library.pw.toml"
 hash = "829709897d7c33e6de96b7a569aa1a827161f453c9dd6cd26491480d63fce8af"
 metafile = true
@@ -592,6 +597,11 @@ metafile = true
 [[files]]
 file = "mods/minecraft-transport-simulator.pw.toml"
 hash = "d0bd09b9c3a3ea0b4b775e094fa51f85b8bbba662b040c2a7a3e03aafe7564d1"
+metafile = true
+
+[[files]]
+file = "mods/modernfix.pw.toml"
+hash = "a9aeaaedd47d724add417a08520589504fc7d56a5c0580db41d7b448ac3623d5"
 metafile = true
 
 [[files]]
