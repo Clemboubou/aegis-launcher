@@ -764,6 +764,11 @@ hash = "bdfecedbe2716e9a10d7801484e22b84d111e0b412ad8ff552065f2aaf99780c"
 metafile = true
 
 [[files]]
+file = "options.txt"
+hash = "1834422a5c493d7aa98cd9d5f240d69eb73a196e7fadfe4dab991f966f7668e1"
+preserve = true
+
+[[files]]
 file = "shaderpacks/bliss-shader.pw.toml"
 hash = "8ffd81a5e0b4c3bc2daf0d86714ef56df4beb1ed87a5c41c4e9bbb94a7006bc1"
 metafile = true
