@@ -157,6 +157,22 @@ git push
 
 Les fichiers placés dans `pack\config\` sont distribués aux joueurs comme les mods (après `packwiz refresh` et publication). Par défaut, un fichier modifié dans le pack remplace celui du joueur à son prochain lancement. Ne mettez donc dans le pack que les configurations qui doivent être identiques pour tout le monde, et pas les réglages personnels comme les touches.
 
+Quelques fichiers font exception : ils portent la mention `preserve = true` dans `pack\index.toml`. Le launcher les installe chez un nouveau joueur, puis ne les remplace plus jamais. Ce sont les réglages que chaque joueur ajuste lui-même : `options.txt`, les réglages graphiques (`config\embeddium-options.json`, `config\oculus.properties`), le chat vocal (`config\voicechat\`) et Axiom (`config\axiom\`). `packwiz refresh` conserve cette mention.
+
+## Temps de chargement et mémoire
+
+Trois réglages du pack et du launcher font l'essentiel de la vitesse de chargement. Ne les retirez pas sans raison.
+
+- **`pack\config\modernfix-mixins.properties`** contient `mixin.perf.dynamic_resources=true`. Le mod ModernFix charge alors les modèles des blocs à la demande au lieu de tous les préparer au démarrage. Mesuré sur ce pack : le chargement passe d'environ 68 à 38 secondes, la mémoire utilisée de 5,5 à 3,2 Go, et un rechargement des ressources (changement de langue ou de pack de textures, F3+T) de plus de 30 secondes à moins de 3. Si un nouveau mod affiche des blocs sans texture, c'est ce réglage qu'il faut suspecter en premier : remplacez `true` par `false`, publiez, et comparez.
+- **`pack\essential\`** contient deux fichiers `autoUpdate=false`. Sans eux, le mod Essential peut bloquer le démarrage sur une question de mise à jour.
+- **`memory` et `jvmArgs` dans `launcher.config.json`.** `memory.default` est la mémoire proposée au joueur (8 Go), `memory.min` le minimum qu'il peut choisir (6 Go) ; le pack a été testé en jeu avec ces deux valeurs. `jvmArgs` contient les options de Java ; `-XX:+ExitOnOutOfMemoryError` ferme le jeu s'il manque de mémoire, au lieu de le laisser figé.
+
+Le launcher ne lance la vérification des mods que si le pack publié a changé depuis le dernier lancement, ou s'il manque un fichier chez le joueur. La comparaison prend moins d'une seconde.
+
+**Langue du jeu.** Le pack n'impose aucune langue. Au tout premier lancement, le launcher règle le jeu sur la langue de Windows du joueur ; ensuite, le choix fait dans le jeu est conservé.
+
+Ce qui reste long tient aux mods eux-mêmes : Decocraft lit ses modèles un par un à chaque démarrage (environ 12 secondes), Immersive Vehicles fait de même (environ 6 secondes), et Sinytra Connector, nécessaire à Axiom, en ajoute environ 5. Aucun réglage ne permet de l'éviter.
+
 ## Changer l'adresse du serveur, la version de Forge ou de Minecraft
 
 Ces réglages sont dans `launcher.config.json`, à la racine du projet :

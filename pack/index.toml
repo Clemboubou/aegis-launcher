@@ -2,7 +2,7 @@ hash-format = "sha256"
 
 [[files]]
 file = "config/DistantHorizons.toml"
-hash = "f4dec93bc8ca80225f8a02b311bcc4e0f81f138496c9d26cd15d808b14b2e93c"
+hash = "598bdee86da4dc47e0b6511333f21cac02a0c58aa43dac59d2a832c4daf1cb4a"
 
 [[files]]
 file = "config/Mekanism/client.toml"
@@ -43,26 +43,32 @@ hash = "aff201054383adfd67347e968dd6aeaccd339454d51dd50983654b2c732acc31"
 [[files]]
 file = "config/axiom/.axiom.json.backup"
 hash = "13a7f89d982fc1c56b1cd6ed29e56ba4ffd01adf25c110215920ac7bef2a3ca3"
+preserve = true
 
 [[files]]
 file = "config/axiom/axiom.json"
 hash = "13a7f89d982fc1c56b1cd6ed29e56ba4ffd01adf25c110215920ac7bef2a3ca3"
+preserve = true
 
 [[files]]
 file = "config/axiom/hotbars/§bTideworn_v3.3 1.20+"
 hash = "5085b2d0a2ee7d65fc2008fbf54573f01a9eb8fad7cedf99ef256e86869ab4e6"
+preserve = true
 
 [[files]]
 file = "config/axiom/imgui.ini"
 hash = "542043fb4c0ce8417e57276176fa997829fad4d517f85046de8b0cf95538b63c"
+preserve = true
 
 [[files]]
 file = "config/axiom/tool_presets/painter/.nbt"
 hash = "2c8c51e1e32ec6dc92d48782445f40ef3c95f2983f419bd65f2c89061b85068c"
+preserve = true
 
 [[files]]
 file = "config/axiom/translations.zip"
 hash = "0931f08140b0c0fb3bb856bb226184d753c24256569e72a452c2234a576459e6"
+preserve = true
 
 [[files]]
 file = "config/chloride-client.toml"
@@ -115,6 +121,7 @@ hash = "09ff183e061d93b79514bc171bf9118497578757e7a5c45946039487656e2619"
 [[files]]
 file = "config/embeddium-options.json"
 hash = "5acb2bd91303d4a5baacc1fbf61605950f83c239fdd3387f92dd3d4ab40cc706"
+preserve = true
 
 [[files]]
 file = "config/essential-mod-partner/config.json"
@@ -225,6 +232,10 @@ file = "config/lrtactical-common.toml"
 hash = "bbc36c3d894b632e919513f30373a90a9ea1db9ee4f7651d69393f863726b779"
 
 [[files]]
+file = "config/modernfix-mixins.properties"
+hash = "9bc5fc71aa93ab2f6b5ecda82808172111c1ea468fd1ac2cbccf16bce5836042"
+
+[[files]]
 file = "config/movingelevators-common.toml"
 hash = "98b5ffd095b06c4e78e705e9e5edb867f4518f9d962bd001c492ff48b4b1ca26"
 
@@ -239,6 +250,7 @@ hash = "d35bf087bbf8d2ef45798363116d019213d0fc2cf712a9c395999f6b03019c9f"
 [[files]]
 file = "config/oculus.properties"
 hash = "73fdb9fd25c814cc9756628a184e1400e5d24b28c6a51505ac7e9f319ba44b73"
+preserve = true
 
 [[files]]
 file = "config/parcool-client.toml"
@@ -343,18 +355,22 @@ hash = "24a7b91377e08d0d8bc2805793c8150d473241aa816cbaa6fca9d254aa537ca5"
 [[files]]
 file = "config/voicechat/category-volumes.properties"
 hash = "8ea68424c5d82568accd90885ae31000faeedd6e6f8c91e625325b1184ea2d8a"
+preserve = true
 
 [[files]]
 file = "config/voicechat/translations.properties"
 hash = "693643b1d393cbb3ea7f062afc4474fcd66e4036c4f8d7c056434979cbf512d1"
+preserve = true
 
 [[files]]
 file = "config/voicechat/voicechat-client.properties"
 hash = "f34ddb949add742c45feda85e550042d18bfce77c837ac3650cd29ad6ce7946c"
+preserve = true
 
 [[files]]
 file = "config/voicechat/voicechat-server.properties"
 hash = "ca352dc14b3f2debe25758399ecad972db34e5c904da41730dec80cf8dedd369"
+preserve = true
 
 [[files]]
 file = "config/waterconfig.toml"
@@ -379,6 +395,14 @@ hash = "d26a63d3cdf326412ba86dcc2781060bc53ed6c74ac7808e65325452e264e820"
 [[files]]
 file = "config/zcraft_decorations-common.toml"
 hash = "f2c1e830358f4dbdb8c6c6c54d0103fcd7bbd1f15c73e7dbd4a9741d4ed4caba"
+
+[[files]]
+file = "essential/essential-loader.properties"
+hash = "ab06327b3a242d8eb3d985c98c5eaa82accc519d875952b82bd712d5e331f247"
+
+[[files]]
+file = "essential/loader/stage1/modlauncher9/stage2.forge_1.17.1.properties"
+hash = "ab06327b3a242d8eb3d985c98c5eaa82accc519d875952b82bd712d5e331f247"
 
 [[files]]
 file = "mods/Zcraft_Decorations-1.0.1.jar"
@@ -775,7 +799,7 @@ metafile = true
 
 [[files]]
 file = "options.txt"
-hash = "1834422a5c493d7aa98cd9d5f240d69eb73a196e7fadfe4dab991f966f7668e1"
+hash = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 preserve = true
 
 [[files]]

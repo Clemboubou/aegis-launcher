@@ -10,6 +10,7 @@ const { Readable, Transform } = require('stream')
 const os = require('os')
 const paths = require('./paths')
 const manual = require('./manual')
+const pack = require('./pack')
 
 const run = promisify(execFile)
 // Délai avant de réafficher une fenêtre de Prism masquée alors que rien ne semble avancer.
@@ -67,7 +68,9 @@ const launcherSettings = {
   IgnoreJavaWizard: 'true',
   CloseAfterLaunch: 'true',
   QuitAfterGameStop: 'true',
-  ShowConsole: 'false'
+  ShowConsole: 'false',
+  // Sans cela, Prism bloque le lancement par une question quand la mémoire allouée lui paraît élevée.
+  LowMemWarning: 'false'
 }
 
 // Ajoute les réglages manquants sans toucher à ceux que Prism ou le joueur ont déjà enregistrés.
@@ -84,13 +87,18 @@ function writeLauncherSettings() {
 }
 
 // La définition de l'instance est réécrite à chaque fois ; le dossier du joueur (.minecraft) n'est jamais touché.
-function writeInstance(config, settings, packUrl) {
+// `sync` : faire vérifier le pack par packwiz avant le lancement (inutile quand il n'a pas changé).
+function writeInstance(config, settings, packUrl, sync = true) {
   const instance = instanceDir(config)
   const game = path.join(instance, '.minecraft')
   fs.mkdirSync(game, { recursive: true })
   fs.mkdirSync(path.join(prismDir, 'icons'), { recursive: true })
   fs.copyFileSync(path.join(resources, 'aegis.png'), path.join(prismDir, 'icons', 'aegis.png'))
-  fs.copyFileSync(path.join(resources, 'packwiz-installer-bootstrap.jar'), path.join(game, 'packwiz-installer-bootstrap.jar'))
+  // L'installateur de mods est fourni avec le launcher : sans cela, son amorce le télécharge par l'API
+  // de GitHub, qui refuse les adresses IP ayant dépassé leur quota, et le premier lancement échoue.
+  for (const jar of ['packwiz-installer-bootstrap.jar', 'packwiz-installer.jar']) {
+    fs.copyFileSync(path.join(resources, jar), path.join(game, jar))
+  }
   fs.writeFileSync(
     path.join(instance, 'mmc-pack.json'),
     JSON.stringify({
@@ -102,6 +110,7 @@ function writeInstance(config, settings, packUrl) {
     })
   )
   const join = Boolean(config.server.host)
+  const jvmArgs = settings.jvmArgs ?? config.jvmArgs ?? ''
   fs.writeFileSync(
     path.join(instance, 'instance.cfg'),
     [
@@ -112,10 +121,15 @@ function writeInstance(config, settings, packUrl) {
       'iconKey=aegis',
       'OverrideCommands=true',
       // -g : packwiz met les mods à jour sans afficher sa fenêtre.
-      `PreLaunchCommand="\\"$INST_JAVA\\" -jar packwiz-installer-bootstrap.jar -g ${packUrl}"`,
+      // --bootstrap-no-update : l'amorce utilise l'installateur fourni au lieu d'interroger GitHub.
+      `PreLaunchCommand=${sync ? `"\\"$INST_JAVA\\" -jar packwiz-installer-bootstrap.jar --bootstrap-no-update -g ${packUrl}"` : ''}`,
       'OverrideMemory=true',
-      'MinMemAlloc=1024',
+      // Mémoire de départ à la moitié du maximum : le jeu n'a pas à agrandir son tas pendant le chargement.
+      `MinMemAlloc=${(settings.minRam ?? Math.max(2, Math.round(settings.ram / 2))) * 1024}`,
       `MaxMemAlloc=${settings.ram * 1024}`,
+      `OverrideJavaArgs=${Boolean(jvmArgs)}`,
+      // Entre guillemets : sans eux, le format de Prism découpe la valeur à chaque virgule.
+      `JvmArgs="${jvmArgs.replace(/"/g, '\\"')}"`,
       `JoinServerOnLaunch=${join}`,
       `JoinServerOnLaunchAddress=${join ? `${config.server.host}:${config.server.port}` : ''}`,
       ''
@@ -123,10 +137,26 @@ function writeInstance(config, settings, packUrl) {
   )
 }
 
-async function prepare(config, settings, packUrl, report) {
+// Région par défaut des langues dont le code de Windows n'en précise pas.
+const regions = { fr: 'fr', en: 'us', de: 'de', es: 'es', it: 'it', pt: 'pt', nl: 'nl', pl: 'pl', ru: 'ru', tr: 'tr', ja: 'jp', ko: 'kr', zh: 'cn', sv: 'se', da: 'dk', cs: 'cz', el: 'gr', uk: 'ua', fi: 'fi', hu: 'hu', ro: 'ro' }
+
+// Au tout premier lancement, le jeu démarre dans la langue de Windows au lieu de l'anglais. Le choix
+// du joueur n'est jamais écrasé ensuite : le fichier n'est écrit que s'il n'existe pas encore.
+// Changer de langue en jeu force un rechargement complet (le mod Axiom l'impose) : autant l'éviter.
+function writeDefaultOptions(config, locale) {
+  const file = path.join(instanceDir(config), '.minecraft', 'options.txt')
+  if (fs.existsSync(file) && fs.statSync(file).size > 0) return
+  const [language, region] = String(locale || 'en-US').toLowerCase().split(/[-_]/)
+  const code = /^[a-z]{2}$/.test(region || '') ? region : regions[language]
+  // Minecraft retombe sur l'anglais si le code lui est inconnu.
+  fs.writeFileSync(file, `lang:${code ? `${language}_${code}` : 'en_us'}\n`)
+}
+
+async function prepare(config, settings, packUrl, report, sync = true) {
   if (!fs.existsSync(exe)) await download(config, report)
   writeLauncherSettings()
-  writeInstance(config, settings, packUrl)
+  writeInstance(config, settings, packUrl, sync)
+  writeDefaultOptions(config, settings.locale)
 }
 
 // Seuls le pseudo et l'identifiant du profil sont lus ; les jetons restent dans le fichier de Prism.
@@ -148,7 +178,7 @@ function logout() {
 async function login(config, settings, packUrl, report) {
   await prepare(config, settings, packUrl, report)
   report({ label: 'Connectez-vous dans la fenêtre Prism Launcher' })
-  const child = spawn(exe, [], { cwd: prismDir })
+  const child = spawn(exe, [], { cwd: prismDir, stdio: 'ignore' })
   return new Promise((resolve) => {
     const watcher = setInterval(() => {
       if (!account()) return
@@ -217,7 +247,7 @@ while ($true) {
 }
 `
 
-// Démarre le script de masquage et attend qu'il soit prêt (la compilation prend environ une seconde).
+// Démarre le script de masquage ; `ready` se résout quand il est prêt (la compilation prend environ une seconde).
 // `onDialogs` reçoit le nombre de fenêtres de Prism qui attendent une réponse du joueur.
 function createHider(onHidden, onDialogs = () => {}) {
   const encoded = Buffer.from(hiderScript, 'utf16le').toString('base64')
@@ -243,9 +273,11 @@ function createHider(onHidden, onDialogs = () => {}) {
   })
   child.on('error', resolveReady)
   child.on('exit', resolveReady)
+  // Si le script n'a pas pu démarrer, le jeu se lance quand même : les fenêtres de Prism restent visibles.
+  child.stdin.on('error', () => {})
   return {
     ready,
-    watch: (id) => child.stdin.write(`${id}\n${flag}\n`),
+    watch: (id) => child.stdin.writable && child.stdin.write(`${id}\n${flag}\n`),
     // Cesse de masquer et réaffiche ce qui l'était ; le script continue de compter les fenêtres.
     reveal: () => fs.writeFileSync(flag, ''),
     stop() {
@@ -274,19 +306,11 @@ async function processorTime(id) {
 // Lance le jeu. `onStarted` est appelé quand le jeu écrit son journal, `onExit` quand la partie est finie
 // ou que le lancement a échoué (`failed`).
 async function play(config, settings, packUrl, report, { onStarted, onExit, onWindow, open, downloads }) {
-  await prepare(config, settings, packUrl, report)
-  await manual.ensure({
-    packUrl,
-    game: path.join(instanceDir(config), '.minecraft'),
-    stateFile: path.join(paths.root, 'manual-mods.json'),
-    downloads: downloads || path.join(os.homedir(), 'Downloads'),
-    open: open || (async () => {}),
-    report
-  })
+  const game = path.join(instanceDir(config), '.minecraft')
   report({ label: 'Préparation du jeu' })
-  const before = await javaProcesses()
   let lastHidden = 0
   let dialogs = 0
+  // Le script de masquage démarre dès le clic : il est prêt quand Prism s'ouvre, sans retarder le lancement.
   const hider = createHider(
     (title) => {
       lastHidden = Date.now()
@@ -294,22 +318,43 @@ async function play(config, settings, packUrl, report, { onStarted, onExit, onWi
     },
     (count) => (dialogs = count)
   )
-  await hider.ready
+  let before
+  try {
+    // packwiz ne vérifie le pack que si c'est nécessaire ; `settings.sync` permet de l'imposer (tests).
+    const sync = settings.sync ?? (await pack.needsSync(packUrl, game))
+    await prepare(config, settings, packUrl, report, sync)
+    await manual.ensure({
+      packUrl,
+      game,
+      stateFile: path.join(paths.root, 'manual-mods.json'),
+      downloads: downloads || path.join(os.homedir(), 'Downloads'),
+      open: open || (async () => {}),
+      report
+    })
+    report({ label: 'Préparation du jeu' })
+    before = await javaProcesses()
+  } catch (error) {
+    hider.stop()
+    throw error
+  }
   const launchedAt = Date.now()
-  const log = path.join(instanceDir(config), '.minecraft', 'logs', 'latest.log')
-  const child = spawn(exe, ['--launch', config.name], { cwd: prismDir })
-  hider.watch(child.pid)
+  const log = path.join(game, 'logs', 'latest.log')
+  // Sortie ignorée : Prism y écrit son journal, et se figerait une fois le tuyau plein si personne ne le lisait.
+  const child = spawn(exe, ['--launch', config.name], { cwd: prismDir, stdio: 'ignore' })
+  hider.ready.then(() => hider.watch(child.pid))
   const ours = new Set()
   let started = false
   let failed = false
-  let idle = 0
-  let tick = 0
+  let exited = false
+  let idleSince = 0
   let cpu = ''
+  let cpuAt = 0
   let activity = ''
   let activeAt = Date.now()
+  let timer = null
   // Prism reste ouvert sans fenêtre après la fermeture du jeu : la fin de partie est donc détectée
   // par la disparition des processus Java apparus depuis le lancement, puis Prism est fermé.
-  const watcher = setInterval(async () => {
+  const check = async () => {
     if (!started && fs.existsSync(log) && fs.statSync(log).mtimeMs >= launchedAt) {
       started = true
       // Le jeu tourne : une fenêtre que Prism ouvrirait maintenant (rapport de plantage) doit rester visible.
@@ -317,33 +362,46 @@ async function play(config, settings, packUrl, report, { onStarted, onExit, onWi
       onStarted()
     }
     const running = await javaProcesses().catch(() => null)
-    if (!running) return
-    for (const id of running) if (!before.has(id)) ours.add(id)
-    const alive = [...ours].some((id) => running.has(id))
-    // Une fenêtre masquée depuis longtemps sans que rien ne tourne est sans doute un long téléchargement :
-    // mieux vaut la montrer.
-    if (!started && !alive && lastHidden && Date.now() - lastHidden > revealAfter) {
-      hider.reveal()
-      lastHidden = 0
-    }
-    idle = started && !alive ? idle + 1 : 0
-    if (idle >= 2) child.kill()
+    if (running) {
+      for (const id of running) if (!before.has(id)) ours.add(id)
+      const alive = [...ours].some((id) => running.has(id))
+      // Une fenêtre masquée depuis longtemps sans que rien ne tourne est sans doute un long téléchargement :
+      // mieux vaut la montrer.
+      if (!started && !alive && lastHidden && Date.now() - lastHidden > revealAfter) {
+        hider.reveal()
+        lastHidden = 0
+      }
+      if (!started || alive) idleSince = 0
+      else idleSince ||= Date.now()
+      if (idleSince && Date.now() - idleSince >= 4000) child.kill()
 
-    // Lancement bloqué : aucun Java, aucune fenêtre qui attend le joueur, et Prism ne travaille plus
-    // (son temps processeur ne bouge pas). Sans cette vérification, le launcher resterait figé.
-    if (tick++ % 4 === 0) cpu = await processorTime(child.pid).catch(() => cpu)
-    const now = `${alive}|${dialogs}|${cpu}`
-    if (now !== activity) {
-      activity = now
-      activeAt = Date.now()
+      // Lancement bloqué : le jeu n'a pas démarré, aucune fenêtre n'attend le joueur, et ni Prism ni Java
+      // ne travaillent (leur temps processeur ne bouge pas). Sans cette vérification, le launcher resterait
+      // figé ; le joueur voit une erreur et peut recliquer sur Jouer.
+      if (!started && Date.now() - cpuAt >= 10000) {
+        cpuAt = Date.now()
+        const ids = [child.pid, ...[...ours].filter((id) => running.has(id))]
+        cpu = (await Promise.all(ids.map((id) => processorTime(id).catch(() => '')))).join('|')
+      }
+      const now = `${alive}|${dialogs}|${cpu}`
+      if (now !== activity) {
+        activity = now
+        activeAt = Date.now()
+      }
+      if (!started && dialogs === 0 && Date.now() - activeAt > stallAfter) {
+        failed = true
+        // Un Java lancé par Prism et resté en attente ne se fermerait pas tout seul.
+        for (const id of ours) execFile('taskkill', ['/F', '/PID', id], { windowsHide: true }, () => {})
+        child.kill()
+      }
     }
-    if (!started && !alive && dialogs === 0 && Date.now() - activeAt > stallAfter) {
-      failed = true
-      child.kill()
-    }
-  }, 2500)
+    // Vérification rapprochée tant que le jeu n'a pas démarré, pour masquer le launcher sans délai.
+    if (!exited) timer = setTimeout(check, started ? 2500 : 500)
+  }
+  timer = setTimeout(check, 500)
   child.on('exit', () => {
-    clearInterval(watcher)
+    exited = true
+    clearTimeout(timer)
     hider.stop()
     onExit({ failed })
   })

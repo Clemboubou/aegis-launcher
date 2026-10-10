@@ -4,7 +4,8 @@
   "minecraft": "1.20.1",
   "forge": "47.4.10",
   "javaRuntime": "java-runtime-gamma",
-  "memory": { "min": 10, "default": 12 },
+  "memory": { "min": 6, "default": 8 },
+  "jvmArgs": "-XX:+ExitOnOutOfMemoryError -XX:ReservedCodeCacheSize=400M -Dforge.logging.debugFile.level=info",
   "engine": "prism",
   "packUrl": "https://raw.githubusercontent.com/Clemboubou/aegis-launcher/main/pack/pack.toml",
   "prism": {

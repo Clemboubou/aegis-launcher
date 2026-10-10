@@ -24,6 +24,9 @@ function packUrl() {
 
 const report = (progress) => send('progress', progress)
 
+// Réglages du joueur, plus la langue de Windows pour le tout premier lancement du jeu.
+const playSettings = () => ({ ...settings.read(), locale: app.getPreferredSystemLanguages()[0] || app.getLocale() })
+
 let window = null
 let restoring = null
 let busy = false
@@ -69,7 +72,7 @@ function createWindow() {
 
 async function playWithPrism() {
   try {
-    await prism.play(config, settings.read(), packUrl(), report, {
+    await prism.play(config, playSettings(), packUrl(), report, {
       downloads: app.getPath('downloads'),
       open: (url) => shell.openExternal(url),
       onStarted() {
@@ -103,7 +106,7 @@ async function loginWithPrism() {
   if (busy) return { account: prism.account() }
   busy = true
   try {
-    return await prism.login(config, settings.read(), packUrl(), report)
+    return await prism.login(config, playSettings(), packUrl(), report)
   } catch (error) {
     log(error)
     return { account: null, error: 'Connexion impossible. Réessayez.' }

@@ -27,7 +27,7 @@ npm start
 
 `engine` dans `launcher.config.json` choisit qui fait la connexion et le lancement. L'interface est la même dans les deux cas.
 
-- `prism` (actif) : Aegis installe [Prism Launcher](https://prismlauncher.org) dans `%APPDATA%\.aegis\prism` et le pilote. La connexion Microsoft se fait dans une fenêtre Prism, une seule fois ; Prism installe Java, Minecraft et Forge, puis lance le jeu avec la mémoire choisie dans Aegis. [packwiz](https://packwiz.infra.link) met les mods à jour avant chaque lancement.
+- `prism` (actif) : Aegis installe [Prism Launcher](https://prismlauncher.org) dans `%APPDATA%\.aegis\prism` et le pilote. La connexion Microsoft se fait dans une fenêtre Prism, une seule fois ; Prism installe Java, Minecraft et Forge, puis lance le jeu avec la mémoire choisie dans Aegis. [packwiz](https://packwiz.infra.link) met les mods à jour au lancement, dès que le pack publié a changé.
 - `native` : Aegis fait tout lui-même (connexion Microsoft, installation dans `%APPDATA%\.aegis\bin`, lancement dans `%APPDATA%\.aegis\game`). Utilisable quand l'application Azure du launcher aura été approuvée par Mojang.
 
 ### Modifier le pack de mods
@@ -44,7 +44,7 @@ Les joueurs reçoivent le changement au lancement suivant, une fois `pack\` pous
 
 ### Configuration
 
-`launcher.config.json` : nom, version de Minecraft et de Forge, moteur, adresse publique du pack (`packUrl`), version de Prism et son empreinte, application Azure du moteur natif, adresse du serveur (connexion directe au lancement si `server.host` est rempli), liens.
+`launcher.config.json` : nom, version de Minecraft et de Forge, mémoire proposée (`memory`) et options de Java (`jvmArgs`), moteur, adresse publique du pack (`packUrl`), version de Prism et son empreinte, application Azure du moteur natif, adresse du serveur (connexion directe au lancement si `server.host` est rempli), liens.
 
 ### Tests
 

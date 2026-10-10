@@ -7,7 +7,7 @@ const paths = require('./paths')
 const totalRam = Math.floor(os.totalmem() / 1024 / 1024 / 1024)
 // Laisse 2 Go au système, plafonne à 16 Go (au-delà, le ramasse-miettes de Java dégrade les performances).
 const ramMax = Math.max(2, Math.min(16, totalRam - 2))
-// Le pack fixe un minimum en dessous duquel le jeu manque de mémoire au chargement.
+// Le pack fixe un minimum en dessous duquel le jeu risque de manquer de mémoire.
 // Sur un PC qui n'a pas cette mémoire, le minimum retombe au maximum possible.
 const ramMin = Math.min(config.memory.min, ramMax)
 
