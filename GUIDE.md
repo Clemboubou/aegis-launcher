@@ -28,14 +28,14 @@ Tout est rangé chez le joueur dans `%APPDATA%\.aegis`. Son dossier de jeu (sauv
 - L'interface, avec connexion, bouton Jouer et réglage de la mémoire.
 - L'installation automatique de Prism, de Java, de Minecraft et de Forge.
 - La mise à jour automatique des mods, avec deux mods de test dans le pack (JEI et sa dépendance MezzConfig).
-- L'installeur Windows (`Aegis Launcher Setup <version>.exe`) et une version sans installation (`Aegis Launcher.exe`).
+- L'installeur Windows (`Aegis-Launcher-Setup-<version>.exe`) et une version sans installation (`Aegis Launcher.exe`).
 - Le dépôt public : `https://github.com/Clemboubou/aegis-launcher`.
 
 ## Ce qui reste à faire
 
 - **Adresse du serveur.** Elle n'est pas encore renseignée, donc le jeu s'ouvre sur le menu principal. Une fois renseignée, le jeu rejoint le serveur directement (voir « Changer l'adresse du serveur »).
 - **Liste des mods définitive.** Remplacer les deux mods de test par ceux du serveur.
-- **Mise à jour du launcher lui-même.** Elle n'est pas automatique : une nouvelle version du launcher doit être redistribuée aux joueurs. Cela ne concerne pas les mods, qui se mettent à jour seuls.
+- **Mise à jour du launcher lui-même.** Elle est automatique à partir de la version 0.5.0, à condition de publier chaque nouvelle version sur GitHub (section « Mettre à jour le launcher chez les joueurs »). Les launchers plus anciens doivent recevoir la 0.5.0 à la main une dernière fois.
 
 ## Ce qu'il vous faut pour gérer les mods
 
@@ -193,7 +193,7 @@ Ces réglages sont dans `launcher.config.json`, à la racine du projet :
 - `server.host` et `server.port` : adresse du serveur. Si `host` est rempli, le jeu rejoint le serveur dès le lancement.
 - `minecraft` et `forge` : versions installées chez les joueurs.
 
-Contrairement aux mods, ces réglages sont intégrés au launcher. Après les avoir modifiés, il faut **reconstruire le launcher et le redistribuer** aux joueurs (section suivante). Si vous changez la version de Forge ou de Minecraft, changez-la aussi dans `pack\pack.toml`.
+Contrairement aux mods, ces réglages sont intégrés au launcher. Après les avoir modifiés, il faut **reconstruire le launcher et publier une nouvelle version** (section suivante). Si vous changez la version de Forge ou de Minecraft, changez-la aussi dans `pack\pack.toml`.
 
 ## Reconstruire le launcher
 
@@ -204,13 +204,26 @@ npm install
 npm run dist
 ```
 
-Les deux fichiers à distribuer apparaissent dans `dist\` : `Aegis Launcher Setup <version>.exe` (installeur) et `Aegis Launcher.exe` (sans installation). Pour tester sans reconstruire : `npm start`.
+Les deux fichiers à distribuer apparaissent dans `dist\` : `Aegis-Launcher-Setup-<version>.exe` (installeur) et `Aegis Launcher.exe` (sans installation). Pour tester sans reconstruire : `npm start`.
+
+### Mettre à jour le launcher chez les joueurs
+
+Depuis la version 0.5.0, le launcher installé se met à jour tout seul : à son démarrage, il regarde s'il existe une version plus récente sur la page **Releases** du dépôt GitHub, la télécharge, s'installe et se rouvre. Si le joueur a déjà cliqué sur Jouer, l'installation se fait à la fermeture du launcher. Il n'y a donc plus à redistribuer l'installeur aux joueurs déjà équipés ; il ne sert qu'aux nouveaux.
+
+Pour publier une nouvelle version :
+
+1. Augmentez `version` dans `package.json` (par exemple `0.5.0` devient `0.5.1`), et envoyez vos modifications sur GitHub.
+2. Double-cliquez sur **`Publier-launcher.cmd`**. Il construit l'installeur et crée la version sur GitHub avec les trois fichiers nécessaires (`Aegis-Launcher-Setup-<version>.exe`, son fichier `.blockmap` et `latest.yml`).
+
+Ce script demande **GitHub CLI** (`winget install GitHub.cli`, puis `gh auth login` une fois). `Publier-launcher.cmd -Essai` construit l'installeur sans rien publier.
+
+Deux limites : les launchers antérieurs à la 0.5.0 ne savent pas se mettre à jour, il faut leur installer la 0.5.0 à la main une dernière fois ; et la version sans installation (`Aegis Launcher.exe`) ne se met jamais à jour seule. L'adresse du dépôt est écrite dans `package.json` (`build.publish`) : si le dépôt change de propriétaire ou de nom, corrigez-la avant de publier la version suivante.
 
 Pour changer le numéro de version, modifiez `version` dans `package.json`. Pour changer l'icône, remplacez `build\icon.png` (512 × 512). Le fond de l'interface est `src\renderer\assets\background.png`.
 
 ## Ce que fait un joueur
 
-1. Il lance `Aegis Launcher Setup <version>.exe`. Windows peut afficher un avertissement « Windows a protégé votre ordinateur », car le fichier n'est pas signé : cliquer sur **Informations complémentaires**, puis **Exécuter quand même**.
+1. Il lance `Aegis-Launcher-Setup-<version>.exe`. Windows peut afficher un avertissement « Windows a protégé votre ordinateur », car le fichier n'est pas signé : cliquer sur **Informations complémentaires**, puis **Exécuter quand même**.
 2. Il clique sur **Se connecter** et entre son compte Microsoft dans la fenêtre Prism.
 3. Il clique sur **Jouer**. Le premier lancement télécharge plusieurs centaines de Mo ; les suivants sont rapides.
 4. Il règle la mémoire dans les réglages (roue dentée). Le changement s'applique au lancement suivant.

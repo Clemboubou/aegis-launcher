@@ -44,6 +44,36 @@ function log(error) {
   fs.appendFileSync(path.join(paths.root, 'launcher.log'), `${new Date().toISOString()} ${error?.stack || error}\n`)
 }
 
+// Mise à jour automatique du launcher, depuis les versions publiées sur GitHub. Elle ne concerne que la
+// version installée : ni le développement, ni la version sans installation.
+function checkForUpdate() {
+  if (!app.isPackaged || process.env.PORTABLE_EXECUTABLE_FILE) return
+  const { autoUpdater } = require('electron-updater')
+  let applying = false
+  // Si le joueur a déjà lancé le jeu, la mise à jour téléchargée s'installe à la fermeture du launcher.
+  autoUpdater.autoInstallOnAppQuit = true
+  autoUpdater.on('update-available', () => {
+    if (busy) return
+    busy = true
+    applying = true
+    send('status', { phase: 'preparing' })
+    report({ label: 'Mise à jour du launcher' })
+  })
+  autoUpdater.on('download-progress', ({ percent }) => {
+    if (applying) report({ label: 'Mise à jour du launcher', ratio: percent / 100 })
+  })
+  // Installation silencieuse, puis le launcher se rouvre tout seul.
+  autoUpdater.on('update-downloaded', () => applying && autoUpdater.quitAndInstall(true, true))
+  autoUpdater.on('error', (error) => {
+    log(error)
+    if (!applying) return
+    applying = false
+    busy = false
+    send('status', { phase: 'idle' })
+  })
+  autoUpdater.checkForUpdates().catch(log)
+}
+
 function createWindow() {
   window = new BrowserWindow({
     width: 1080,
@@ -66,6 +96,8 @@ function createWindow() {
   })
   window.loadFile(path.join(__dirname, '../renderer/index.html'))
   window.once('ready-to-show', show)
+  // Un court délai laisse l'interface s'initialiser avant de lui annoncer une éventuelle mise à jour.
+  window.webContents.once('did-finish-load', () => setTimeout(checkForUpdate, 1500))
   window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }))
   window.webContents.on('will-navigate', (event) => event.preventDefault())
 }
